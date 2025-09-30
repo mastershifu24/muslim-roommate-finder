@@ -33,6 +33,7 @@ urlpatterns = [
     path('rooms/<int:pk>/', views.room_detail, name='room_detail'),
     path('rooms/<int:pk>/edit/', views.room_edit, name='room_edit'),
     path("rooms/<int:pk>/delete/", views.room_delete, name="room_delete"),
+    path('advanced-search/', views.advanced_search, name='advanced_search'),
     
     # Messages
     path('inbox/', views.inbox, name='inbox'),
