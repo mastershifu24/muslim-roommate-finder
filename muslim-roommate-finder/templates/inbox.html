@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Messages - Muslim Roommate Finder{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-envelope me-2"></i>Messages</h1>
+    <div class="d-flex gap-2">
+        <a href="{% url 'compose_message' %}" class="btn btn-primary">
+            <i class="fas fa-edit me-1"></i>Compose Message
+        </a>
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary">← Back to Home</a>
+    </div>
+</div>
+
+<!-- Message Tabs -->
+<ul class="nav nav-tabs" id="messageTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="received-tab" data-bs-toggle="tab" data-bs-target="#received" type="button" role="tab">
+            <i class="fas fa-inbox me-1"></i>Received ({{ received_messages.count }})
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="sent-tab" data-bs-toggle="tab" data-bs-target="#sent" type="button" role="tab">
+            <i class="fas fa-paper-plane me-1"></i>Sent ({{ sent_messages.count }})
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content" id="messageTabContent">
+    <!-- Received Messages -->
+    <div class="tab-pane fade show active" id="received" role="tabpanel">
+        <div class="mt-3">
+            {% if received_messages %}
+                {% for message in received_messages %}
+                    <div class="card mb-3 {% if not message.is_read %}border-primary{% endif %}">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>From: {{ message.sender.name }}</strong>
+                                {% if not message.is_read %}
+                                    <span class="badge bg-primary ms-2">New</span>
+                                {% endif %}
+                            </div>
+                            <small class="text-muted">{{ message.timestamp|date:"M d, Y g:i A" }}</small>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ message.content }}</p>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'contact_profile' message.sender.id %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-reply me-1"></i>Reply
+                                </a>
+                                <a href="{% url 'profile_detail' message.sender.id %}" class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-user me-1"></i>View Profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">No messages received yet</h4>
+                    <p class="text-muted">When someone sends you a message, it will appear here.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Sent Messages -->
+    <div class="tab-pane fade" id="sent" role="tabpanel">
+        <div class="mt-3">
+            {% if sent_messages %}
+                {% for message in sent_messages %}
+                    <div class="card mb-3">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>To: {{ message.recipient.name }}</strong>
+                            </div>
+                            <small class="text-muted">{{ message.timestamp|date:"M d, Y g:i A" }}</small>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ message.content }}</p>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'contact_profile' message.recipient.id %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-envelope me-1"></i>Send Another
+                                </a>
+                                <a href="{% url 'profile_detail' message.recipient.id %}" class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-user me-1"></i>View Profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-paper-plane fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">No messages sent yet</h4>
+                    <p class="text-muted">Start connecting with potential roommates by sending them a message!</p>
+                    <a href="{% url 'home' %}" class="btn btn-primary">
+                        <i class="fas fa-search me-1"></i>Find Roommates
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+// Mark messages as read when viewed
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-mark received messages as read after a few seconds
+    setTimeout(function() {
+        fetch('{% url "inbox" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({action: 'mark_read'})
+        });
+    }, 3000);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,10 @@
+<h2>Edit Message in {{ room.title }}</h2>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" name="update">Update</button>
+  <button type="submit" name="delete">Delete</button>
+</form>
+
+<a href="{% url 'message_list_create' room.id %}">Back to messages</a>

@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home - Muslim Roommate Finder{% endblock %}
+
+{% block content %}
+<!-- Quick Filter Buttons -->
+<div class="mb-3">
+  <div class="btn-group-vertical btn-group d-md-inline-flex flex-md-row" role="group">
+    <a href="{% url 'home' %}" class="btn btn-outline-primary {% if not preference_filter %}active{% endif %} mb-1 mb-md-0">Show All</a>
+    <a href="?preference=offering_room" class="btn btn-outline-success {% if preference_filter == 'offering_room' %}active{% endif %} mb-1 mb-md-0">🏠 Available Rooms</a>
+    <a href="?preference=looking_for_room" class="btn btn-outline-info {% if preference_filter == 'looking_for_room' %}active{% endif %} mb-1 mb-md-0">👥 Looking for Rooms</a>
+  </div>
+</div>
+
+<!-- Advanced Filters -->
+<div class="card mb-4">
+  <div class="card-header">
+    <button class="btn btn-link text-decoration-none p-0" type="button" data-bs-toggle="collapse" data-bs-target="#filtersCollapse">
+      🔍 Advanced Filters
+    </button>
+  </div>
+  <div class="collapse" id="filtersCollapse">
+    <div class="card-body">
+      <form method="get" class="row g-3">
+        <div class="col-md-3">
+          <label for="search" class="form-label">Search</label>
+          <input type="text" class="form-control" id="search" name="search" value="{{ search_query }}" placeholder="Search...">
+        </div>
+        <div class="col-md-3">
+          <label for="city" class="form-label">City</label>
+          <select class="form-select" id="city" name="city">
+            <option value="">All Cities</option>
+            {% for city in cities %}
+              <option value="{{ city }}" {% if city == city_filter %}selected{% endif %}>{{ city }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label for="age_min" class="form-label">Min Age</label>
+          <input type="number" class="form-control" id="age_min" name="age_min" value="{{ age_min }}" min="18" max="100">
+        </div>
+        <div class="col-md-2">
+          <label for="age_max" class="form-label">Max Age</label>
+          <input type="number" class="form-control" id="age_max" name="age_max" value="{{ age_max }}" min="18" max="100">
+        </div>
+        <div class="col-md-2">
+          <label for="gender" class="form-label">Gender</label>
+          <select class="form-select" id="gender" name="gender">
+            <option value="">All</option>
+            <option value="male" {% if gender_filter == 'male' %}selected{% endif %}>Male</option>
+            <option value="female" {% if gender_filter == 'female' %}selected{% endif %}>Female</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Apply Filters</button>
+          <a href="{% url 'home' %}" class="btn btn-outline-secondary">Clear</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Available Rooms -->
+{% if available_rooms %}
+<h3 class="text-success mb-3">🏠 Available Rooms ({{ rooms_count }})</h3>
+<div class="row">
+  {% for room in available_rooms %}
+    <div class="col-12 col-md-6 col-lg-4 mb-4">
+      <div class="card h-100 border-success">
+        <a href="{% url 'room_detail' room.id %}" class="text-decoration-none text-dark">
+          <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <span>{{ room.title }}</span>
+            <span class="badge bg-light text-success">{{ room.get_price_display }}/mo</span>
+          </div>
+          <div class="card-body p-0">
+            {% if room.primary_image %}
+              <img src="{{ room.primary_image.image.url }}" class="img-fluid w-100" alt="Room image" style="height: 200px; object-fit: cover;">
+            {% else %}
+              <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                <i class="fas fa-home fa-3x text-muted"></i>
+              </div>
+            {% endif %}
+            <div class="p-3">
+              <h6 class="text-muted mb-2">
+                <i class="fas fa-map-marker-alt me-1"></i>{{ room.city }}
+              </h6>
+              {% if room.description %}
+                <p class="small text-muted mb-2">{{ room.description|truncatewords:20 }}</p>
+              {% endif %}
+              <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">
+                  <i class="fas fa-user me-1"></i>{{ room.user.name }}
+                </small>
+                {% if room.phone_number %}
+                  <small class="text-success">
+                    <i class="fas fa-phone me-1"></i>Phone Available
+                  </small>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- People Looking for Rooms -->
+{% if profiles %}
+<h3 class="text-primary mb-3">👥 People Looking for Rooms ({{ profile_count }})</h3>
+<div class="row">
+  {% for profile in profiles %}
+    <div class="col-12 col-md-6 col-lg-4 mb-4">
+      <div class="card h-100 border-primary">
+        <a href="{{ profile.get_absolute_url }}" class="text-decoration-none text-dark">
+          <div class="card-header bg-primary text-white">{{ profile.name }}, {{ profile.age }}</div>
+          <div class="card-body">
+            {% if profile.profile_photo %}
+              <img src="{{ profile.profile_photo.url }}" class="img-fluid mb-2 rounded-circle mx-auto d-block" alt="Profile photo" style="width: 80px; height: 80px; object-fit: cover;">
+            {% else %}
+              <div class="bg-light rounded-circle mx-auto d-block mb-2 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                <i class="fas fa-user fa-2x text-muted"></i>
+              </div>
+            {% endif %}
+            <h6 class="text-muted text-center">{{ profile.city }} | {{ profile.get_gender_display }}</h6>
+            {% if profile.bio %}<p class="small">{{ profile.bio|truncatewords:15 }}</p>{% endif %}
+            <small><strong>Contact:</strong> {{ profile.contact_email }}</small>
+          </div>
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,21 @@
+django
+gunicorn
+whitenoise
+dj-database-url
+psycopg[binary]
+python-dotenv
+Pillow>=10.0.0
+django-cleanup>=8.0.0
+#Social authentication
+django-allauth
+requests
+PyJWT
+cryptography
+
+#additional dependencies for allauth
+certifi
+charset-normalizer
+idna
+urllib3
+cffi
+pycparser

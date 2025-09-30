@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Compose Message - Muslim Roommate Finder{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1><i class="fas fa-edit me-2"></i>Compose Message</h1>
+            <a href="{% url 'inbox' %}" class="btn btn-outline-secondary">← Back to Inbox</a>
+        </div>
+
+        <!-- Recipient Selection Card -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-user me-2"></i>Select Recipient</h5>
+            </div>
+            <div class="card-body">
+                {% if recipient_profile %}
+                    <!-- Pre-selected recipient -->
+                    <div class="alert alert-info" role="alert">
+                        <strong>Sending to:</strong> {{ recipient_profile.name }}
+                        <span class="badge bg-primary ms-2">{{ recipient_profile.city }}</span>
+                        {% if recipient_profile.is_looking_for_room %}
+                            <span class="badge bg-success ms-1">Looking for Room</span>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <!-- Recipient selection dropdown -->
+                    <div class="mb-3">
+                        <label for="recipientSelect" class="form-label">Choose who to message:</label>
+                        <select class="form-select" id="recipientSelect" name="recipient_id" form="messageForm" required>
+                            <option value="">Select a person...</option>
+                            {% for profile in available_profiles %}
+                                <option value="{{ profile.id }}">
+                                    {{ profile.name }} - {{ profile.city }}
+                                    {% if profile.is_looking_for_room %}(Looking for Room){% endif %}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Message Form -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-envelope me-2"></i>Your Message</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" id="messageForm">
+                    {% csrf_token %}
+                    
+                    {% if recipient_profile %}
+                        <input type="hidden" name="recipient_id" value="{{ recipient_profile.id }}">
+                    {% endif %}
+                    
+                    <div class="mb-4">
+                        <label for="{{ form.content.id_for_label }}" class="form-label">Message Content</label>
+                        {{ form.content }}
+                        {% if form.content.help_text %}
+                            <div class="form-text">{{ form.content.help_text }}</div>
+                        {% endif %}
+                        {% if form.content.errors %}
+                            <div class="text-danger">{{ form.content.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Be respectful and introduce yourself. Mention what you're looking for in a roommate.
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
+                            <i class="fas fa-paper-plane me-2"></i>Send Message
+                        </button>
+                        <a href="{% url 'inbox' %}" class="btn btn-outline-secondary btn-lg">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Message Tips</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Good to mention:</h6>
+                        <ul class="small">
+                            <li>Your occupation/student status</li>
+                            <li>Your lifestyle preferences</li>
+                            <li>What you're looking for</li>
+                            <li>Your budget range</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Islamic considerations:</h6>
+                        <ul class="small">
+                            <li>Prayer schedule preferences</li>
+                            <li>Halal kitchen requirements</li>
+                            <li>Guest policies</li>
+                            <li>Shared space usage</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Privacy Notice -->
+        <div class="alert alert-info mt-4" role="alert">
+            <h6 class="alert-heading"><i class="fas fa-shield-alt me-1"></i>Privacy & Safety</h6>
+            <p class="mb-0">
+                Your message will be sent through our secure messaging system. The recipient can reply to you through the platform. 
+                Please be respectful and follow our community guidelines.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-resize textarea
+document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.querySelector('textarea');
+    if (textarea) {
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    }
+});
+</script>
+{% endblock %}

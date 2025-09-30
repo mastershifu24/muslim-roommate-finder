@@ -1,0 +1,21 @@
+<h2>Messages in {{ room.title }}</h2>
+
+<ul>
+  {% for msg in messages %}
+    <li>
+      <strong>{{ msg.sender.username }}</strong>: {{ msg.content }}
+      <form action="{% url 'message_edit_delete' room.id msg.id %}" method="get" style="display:inline;">
+        <button type="submit">Edit</button>
+      </form>
+    </li>
+  {% empty %}
+    <li>No messages yet.</li>
+  {% endfor %}
+</ul>
+
+<h3>Add a new message</h3>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Send</button>
+</form>

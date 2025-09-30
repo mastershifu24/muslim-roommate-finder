@@ -1,0 +1,507 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home - Muslim Roommate Finder{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section bg-gradient-primary text-white rounded-4 p-5 mb-5 text-center position-relative overflow-hidden">
+  <div class="position-absolute top-0 start-0 w-100 h-100 opacity-10">
+    <div class="d-flex justify-content-around align-items-center h-100 fs-1">
+      <i class="fas fa-home"></i>
+      <i class="fas fa-mosque"></i>
+      <i class="fas fa-users"></i>
+      <i class="fas fa-heart"></i>
+    </div>
+  </div>
+  <div class="container position-relative">
+    <h1 class="display-4 fw-bold mb-3">🏠 Find Your Perfect Muslim Roommate</h1>
+    <p class="lead mb-4">Connect with fellow Muslims for halal-friendly housing solutions</p>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <!-- Quick Search Bar -->
+        <form method="get" class="d-flex gap-2 mb-3">
+          <input type="text" name="search" class="form-control form-control-lg shadow-sm" 
+                 placeholder="🔍 Search by city, name, or description..." 
+                 value="{{ search_query }}">
+          <button type="submit" class="btn btn-light btn-lg px-4 shadow-sm">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row mb-5">
+  <div class="col-md-4 mb-3">
+    <div class="card border-0 shadow-sm h-100 hover-lift">
+      <div class="card-body text-center p-4">
+        <div class="display-4 text-primary mb-3">🏠</div>
+        <h3 class="card-title text-primary fw-bold">{{ rooms_count|default:0 }}</h3>
+        <p class="card-text text-muted mb-0">Available Rooms</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-3">
+    <div class="card border-0 shadow-sm h-100 hover-lift">
+      <div class="card-body text-center p-4">
+        <div class="display-4 text-info mb-3">👥</div>
+        <h3 class="card-title text-info fw-bold">{{ profile_count|default:0 }}</h3>
+        <p class="card-text text-muted mb-0">People Looking</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-3">
+    <div class="card border-0 shadow-sm h-100 hover-lift">
+      <div class="card-body text-center p-4">
+        <div class="display-4 text-success mb-3">🤝</div>
+        <h3 class="card-title text-success fw-bold">{{ total_matches|default:42 }}</h3>
+        <p class="card-text text-muted mb-0">Successful Matches</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Filter Tabs -->
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body p-0">
+    <ul class="nav nav-pills nav-fill m-3" id="filterTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link {% if not preference_filter or preference_filter == 'all' %}active{% endif %} rounded-pill" 
+           href="?preference=all">
+          <i class="fas fa-home me-2"></i>All Listings
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link {% if preference_filter == 'offering_rooms' %}active{% endif %} rounded-pill" 
+           href="?preference=offering_rooms">
+          <i class="fas fa-key me-2"></i>Available Rooms
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link {% if preference_filter == 'looking_for_rooms' %}active{% endif %} rounded-pill" 
+           href="?preference=looking_for_rooms">
+          <i class="fas fa-search me-2"></i>Looking for Rooms
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Advanced Filters Card -->
+<div class="card border-0 shadow-sm mb-5">
+  <div class="card-header bg-white border-0 py-3">
+    <button class="btn btn-link text-decoration-none p-0 w-100 text-start fw-semibold fs-5" 
+            type="button" data-bs-toggle="collapse" data-bs-target="#advancedFilters">
+      <i class="fas fa-sliders-h me-2 text-primary"></i>Advanced Filters 
+      <i class="fas fa-chevron-down float-end mt-1"></i>
+    </button>
+  </div>
+  <div class="collapse" id="advancedFilters">
+    <div class="card-body p-4">
+      <form method="get" id="filterForm">
+        <div class="row g-4">
+          <!-- Price Range for Rooms -->
+          {% if preference_filter == 'offering_rooms' or not preference_filter %}
+          <div class="col-lg-6">
+            <label class="form-label fw-semibold mb-3">
+              <i class="fas fa-dollar-sign text-success me-2"></i>Monthly Rent Range
+            </label>
+            <div class="price-range-container p-3 bg-light rounded">
+              <div class="row">
+                <div class="col-6">
+                  <label class="form-label small text-muted">Minimum</label>
+                  <input type="range" class="form-range" id="minPrice" name="min_price" 
+                         min="300" max="3000" step="25" value="{{ min_price|default:300 }}"
+                         oninput="updatePriceDisplay()">
+                  <div class="text-center">
+                    <span class="badge bg-success fs-6" id="minPriceDisplay">${{ min_price|default:300 }}</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <label class="form-label small text-muted">Maximum</label>
+                  <input type="range" class="form-range" id="maxPrice" name="max_price" 
+                         min="300" max="3000" step="25" value="{{ max_price|default:3000 }}"
+                         oninput="updatePriceDisplay()">
+                  <div class="text-center">
+                    <span class="badge bg-success fs-6" id="maxPriceDisplay">${{ max_price|default:3000 }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          
+          <!-- Location -->
+          <div class="col-lg-6">
+            <label class="form-label fw-semibold">
+              <i class="fas fa-map-marker-alt text-danger me-2"></i>Location
+            </label>
+            <select name="city" class="form-select form-select-lg">
+              <option value="">🌍 All Cities</option>
+              {% for city in cities %}
+                <option value="{{ city }}" {% if city_filter == city %}selected{% endif %}>
+                  📍 {{ city }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <!-- Age Range -->
+          <div class="col-lg-6">
+            <label class="form-label fw-semibold">
+              <i class="fas fa-birthday-cake text-warning me-2"></i>Age Range
+            </label>
+            <div class="row">
+              <div class="col-6">
+                <input type="number" name="min_age" class="form-control form-control-lg" 
+                       placeholder="Min Age" value="{{ min_age }}" min="18" max="100">
+              </div>
+              <div class="col-6">
+                <input type="number" name="max_age" class="form-control form-control-lg" 
+                       placeholder="Max Age" value="{{ max_age }}" min="18" max="100">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Gender -->
+          <div class="col-lg-6">
+            <label class="form-label fw-semibold">
+              <i class="fas fa-user text-info me-2"></i>Gender Preference
+            </label>
+            <select name="gender" class="form-select form-select-lg">
+              <option value="">👤 Any Gender</option>
+              <option value="male" {% if gender_filter == 'male' %}selected{% endif %}>👨 Male</option>
+              <option value="female" {% if gender_filter == 'female' %}selected{% endif %}>👩 Female</option>
+            </select>
+          </div>
+          
+          <!-- Islamic Preferences -->
+          <div class="col-12">
+            <label class="form-label fw-semibold mb-3">
+              <i class="fas fa-mosque text-success me-2"></i>Islamic Preferences
+            </label>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <div class="card border-0 bg-light h-100">
+                  <div class="card-body text-center p-3">
+                    <div class="form-check form-switch d-flex justify-content-center">
+                      <input class="form-check-input fs-5" type="checkbox" name="halal_kitchen" 
+                             {% if halal_kitchen_filter %}checked{% endif %}>
+                    </div>
+                    <div class="mt-2">
+                      <i class="fas fa-utensils text-success fs-4"></i>
+                      <div class="fw-semibold">Halal Kitchen</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div class="card border-0 bg-light h-100">
+                  <div class="card-body text-center p-3">
+                    <div class="form-check form-switch d-flex justify-content-center">
+                      <input class="form-check-input fs-5" type="checkbox" name="prayer_friendly" 
+                             {% if prayer_friendly_filter %}checked{% endif %}>
+                    </div>
+                    <div class="mt-2">
+                      <i class="fas fa-mosque text-success fs-4"></i>
+                      <div class="fw-semibold">Prayer Friendly</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div class="card border-0 bg-light h-100">
+                  <div class="card-body text-center p-3">
+                    <div class="form-check form-switch d-flex justify-content-center">
+                      <input class="form-check-input fs-5" type="checkbox" name="guests_allowed" 
+                             {% if guests_allowed_filter %}checked{% endif %}>
+                    </div>
+                    <div class="mt-2">
+                      <i class="fas fa-users text-success fs-4"></i>
+                      <div class="fw-semibold">Guests Allowed</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Action Buttons -->
+          <div class="col-12">
+            <div class="d-flex gap-3 flex-wrap justify-content-center">
+              <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill shadow">
+                <i class="fas fa-search me-2"></i>Apply Filters
+              </button>
+              <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg px-5 rounded-pill">
+                <i class="fas fa-refresh me-2"></i>Reset All
+              </a>
+              <button type="button" class="btn btn-outline-info btn-lg px-5 rounded-pill" onclick="saveSearch()">
+                <i class="fas fa-bookmark me-2"></i>Save Search
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Results Section -->
+<div id="resultsSection">
+  <!-- Available Rooms -->
+  {% if available_rooms %}
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-success mb-0">
+      <i class="fas fa-home me-2"></i>Available Rooms 
+      <span class="badge bg-success rounded-pill">{{ rooms_count }}</span>
+    </h2>
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggleView('grid')">
+        <i class="fas fa-th"></i>
+      </button>
+      <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggleView('list')">
+        <i class="fas fa-list"></i>
+      </button>
+    </div>
+  </div>
+  
+  <div class="row" id="roomsGrid">
+    {% for room in available_rooms %}
+      <div class="col-12 col-md-6 col-lg-4 mb-4">
+        <div class="card border-0 shadow-sm h-100 hover-lift">
+          <a href="{% url 'room_detail' room.id %}" class="text-decoration-none text-dark">
+            <div class="position-relative">
+              {% if room.primary_image %}
+                <img src="{{ room.primary_image.image.url }}" class="card-img-top" 
+                     alt="Room image" style="height: 200px; object-fit: cover;">
+              {% else %}
+                <div class="bg-gradient-success d-flex align-items-center justify-content-center text-white" 
+                     style="height: 200px;">
+                  <i class="fas fa-home fa-4x opacity-50"></i>
+                </div>
+              {% endif %}
+              <div class="position-absolute top-0 end-0 m-3">
+                <span class="badge bg-success fs-6 rounded-pill shadow">
+                  {{ room.get_price_display }}/mo
+                </span>
+              </div>
+            </div>
+            
+            <div class="card-body p-4">
+              <h5 class="card-title fw-bold mb-2">{{ room.title }}</h5>
+              <p class="text-muted mb-2">
+                <i class="fas fa-map-marker-alt me-1"></i>{{ room.city }}
+              </p>
+              {% if room.description %}
+                <p class="card-text small text-muted mb-3">{{ room.description|truncatewords:15 }}</p>
+              {% endif %}
+              
+              <!-- Amenities -->
+              <div class="d-flex flex-wrap gap-1 mb-3">
+                {% if room.halal_kitchen %}
+                  <span class="badge bg-success rounded-pill">🥘 Halal Kitchen</span>
+                {% endif %}
+                {% if room.prayer_friendly %}
+                  <span class="badge bg-info rounded-pill">🕌 Prayer Friendly</span>
+                {% endif %}
+                {% if room.guests_allowed %}
+                  <span class="badge bg-warning rounded-pill">👥 Guests OK</span>
+                {% endif %}
+              </div>
+              
+              <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">
+                  <i class="fas fa-user me-1"></i>{{ room.user.name }}
+                </small>
+                {% if room.phone_number %}
+                  <small class="text-success">
+                    <i class="fas fa-phone me-1"></i>Phone Available
+                  </small>
+                {% endif %}
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- People Looking for Rooms -->
+  {% if profiles %}
+  <div class="d-flex justify-content-between align-items-center mb-4 mt-5">
+    <h2 class="text-primary mb-0">
+      <i class="fas fa-users me-2"></i>People Looking for Rooms 
+      <span class="badge bg-primary rounded-pill">{{ profile_count }}</span>
+    </h2>
+  </div>
+  
+  <div class="row">
+    {% for profile in profiles %}
+      <div class="col-12 col-md-6 col-lg-4 mb-4">
+        <div class="card border-0 shadow-sm h-100 hover-lift">
+          <a href="{{ profile.get_absolute_url }}" class="text-decoration-none text-dark">
+            <div class="card-header bg-primary text-white text-center py-3">
+              <h5 class="mb-0 fw-bold">{{ profile.name }}, {{ profile.age }}</h5>
+            </div>
+            <div class="card-body text-center p-4">
+              {% if profile.profile_photo %}
+                <img src="{{ profile.profile_photo.url }}" 
+                     class="rounded-circle mb-3 shadow" 
+                     alt="Profile photo" 
+                     style="width: 80px; height: 80px; object-fit: cover;">
+              {% else %}
+                <div class="bg-gradient-primary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center text-white shadow" 
+                     style="width: 80px; height: 80px;">
+                  <i class="fas fa-user fa-2x"></i>
+                </div>
+              {% endif %}
+              
+              <h6 class="text-muted mb-3">
+                <i class="fas fa-map-marker-alt me-1"></i>{{ profile.city }} | 
+                {% if profile.gender == 'male' %}
+                <i class="fas fa-mars me-1"></i>
+                {% else %}
+                  <i class="fas fa-venus me-1"></i>
+                {% endif %}
+                {{ profile.get_gender_display }}
+
+              </h6>
+              
+              {% if profile.bio %}
+                <p class="small mb-3">{{ profile.bio|truncatewords:15 }}</p>
+              {% endif %}
+              
+              <!-- Preferences -->
+              <div class="d-flex flex-wrap gap-1 justify-content-center mb-3">
+                {% if profile.halal_kitchen %}
+                  <span class="badge bg-success rounded-pill">🥘 Halal Kitchen</span>
+                {% endif %}
+                {% if profile.prayer_friendly %}
+                  <span class="badge bg-info rounded-pill">🕌 Prayer Friendly</span>
+                {% endif %}
+                {% if profile.guests_allowed %}
+                  <span class="badge bg-warning rounded-pill">👥 Guests OK</span>
+                {% endif %}
+              </div>
+              
+              <small class="text-muted">
+                <i class="fas fa-envelope me-1"></i>{{ profile.contact_email }}
+              </small>
+            </div>
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- No Results -->
+  {% if not available_rooms and not profiles %}
+  <div class="text-center py-5">
+    <div class="display-1 text-muted mb-4">🔍</div>
+    <h3 class="text-muted mb-3">No results found</h3>
+    <p class="text-muted mb-4">Try adjusting your filters or search terms</p>
+    <a href="{% url 'home' %}" class="btn btn-primary btn-lg rounded-pill">
+      <i class="fas fa-refresh me-2"></i>Reset Filters
+    </a>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Custom Styles -->
+<style>
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+}
+
+.bg-gradient-success {
+  background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+}
+
+.hover-lift {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.nav-pills .nav-link {
+  transition: all 0.3s ease;
+}
+
+.nav-pills .nav-link:hover {
+  transform: translateY(-2px);
+}
+
+.form-range::-webkit-slider-thumb {
+  background: #007bff;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.card-img-top {
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .display-4 {
+    font-size: 2rem;
+  }
+  
+  .hero-section {
+    padding: 2rem 1rem !important;
+  }
+}
+</style>
+
+<!-- JavaScript -->
+<script>
+function updatePriceDisplay() {
+  const minPrice = document.getElementById('minPrice').value;
+  const maxPrice = document.getElementById('maxPrice').value;
+  document.getElementById('minPriceDisplay').textContent = '$' + minPrice;
+  document.getElementById('maxPriceDisplay').textContent = '$' + maxPrice;
+}
+
+function toggleView(viewType) {
+  const grid = document.getElementById('roomsGrid');
+  if (viewType === 'list') {
+    grid.classList.remove('row');
+    grid.classList.add('list-view');
+  } else {
+    grid.classList.add('row');
+    grid.classList.remove('list-view');
+  }
+}
+
+function saveSearch() {
+  // Save current search parameters to localStorage
+  const params = new URLSearchParams(window.location.search);
+  localStorage.setItem('savedSearch', params.toString());
+  alert('Search saved! You can access it from your dashboard.');
+}
+
+// Auto-submit form when filters change (optional)
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('filterForm');
+  const inputs = form.querySelectorAll('input, select');
+  
+  inputs.forEach(input => {
+    input.addEventListener('change', function() {
+      // Optional: Auto-submit on change
+      // form.submit();
+    });
+  });
+});
+</script>
+{% endblock %}
