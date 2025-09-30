@@ -533,6 +533,7 @@ def advanced_search(request):
         'filters': request.GET,
         'amenities': all_amenities,
         'room_types': RoomType.objects.all(),
+        'selected_amenities': amenities,
     })
 
 @login_required

@@ -44,7 +44,7 @@
                 {% for amenity in amenities %}
                     <label class="me-3">
                         <input type="checkbox" name="amenities" value="{{ amenity.id }}"
-                               {% if amenity.id|stringformat:"s" in filters.getlist:'amenities' %}checked{% endif %}>
+                               {% if amenity.id|stringformat:"s" in selected_amenities %}checked{% endif %}>
                         {{ amenity.name }}
                     </label>
                 {% endfor %}
