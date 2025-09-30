@@ -1,0 +1,304 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Browse Profiles - Muslim Roommate Finder{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="text-primary mb-2">
+                        <i class="fas fa-users me-2"></i>Browse Profiles
+                    </h1>
+                    <p class="text-muted mb-0">
+                        Find compatible Muslim roommates and tenants
+                        <span class="badge bg-primary rounded-pill ms-2">{{ total_profiles }} profiles</span>
+                    </p>
+                </div>
+                <div>
+                    <a href="{% url 'create_profile' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-1"></i>Create Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-filter me-2"></i>Filter Profiles
+                        <button class="btn btn-sm btn-outline-primary float-end" type="button" data-bs-toggle="collapse" data-bs-target="#filtersCollapse">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </h5>
+                </div>
+                <div class="collapse show" id="filtersCollapse">
+                    <div class="card-body">
+                        <form method="GET" class="row g-3">
+                            <!-- Search -->
+                            <div class="col-md-6">
+                                <label for="search" class="form-label">Search</label>
+                                <input type="text" class="form-control" id="search" name="search" 
+                                       value="{{ search_query }}" placeholder="Name, city, bio...">
+                            </div>
+
+                            <!-- Location -->
+                            <div class="col-md-3">
+                                <label for="city" class="form-label">City</label>
+                                <select class="form-select" id="city" name="city">
+                                    <option value="">All Cities</option>
+                                    {% for city in cities %}
+                                        <option value="{{ city }}" {% if city_filter == city %}selected{% endif %}>{{ city }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="state" class="form-label">State</label>
+                                <select class="form-select" id="state" name="state">
+                                    <option value="">All States</option>
+                                    {% for state in states %}
+                                        <option value="{{ state }}" {% if state_filter == state %}selected{% endif %}>{{ state }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Demographics -->
+                            <div class="col-md-3">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select class="form-select" id="gender" name="gender">
+                                    <option value="">All Genders</option>
+                                    <option value="male" {% if gender_filter == 'male' %}selected{% endif %}>Male</option>
+                                    <option value="female" {% if gender_filter == 'female' %}selected{% endif %}>Female</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="age_min" class="form-label">Min Age</label>
+                                <input type="number" class="form-control" id="age_min" name="age_min" 
+                                       value="{{ age_min }}" min="18" max="100" placeholder="18">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="age_max" class="form-label">Max Age</label>
+                                <input type="number" class="form-control" id="age_max" name="age_max" 
+                                       value="{{ age_max }}" min="18" max="100" placeholder="65">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="looking_for" class="form-label">Looking For</label>
+                                <select class="form-select" id="looking_for" name="looking_for">
+                                    <option value="">All</option>
+                                    <option value="room" {% if looking_for == 'room' %}selected{% endif %}>Looking for Room</option>
+                                    <option value="roommate" {% if looking_for == 'roommate' %}selected{% endif %}>Offering Room</option>
+                                    <option value="both" {% if looking_for == 'both' %}selected{% endif %}>Both</option>
+                                </select>
+                            </div>
+
+                            <!-- Islamic Preferences -->
+                            <div class="col-md-4">
+                                <label class="form-label">Islamic Preferences</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="halal_kitchen" name="halal_kitchen" 
+                                           {% if halal_kitchen %}checked{% endif %}>
+                                    <label class="form-check-label" for="halal_kitchen">
+                                        Halal Kitchen
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="prayer_friendly" name="prayer_friendly" 
+                                           {% if prayer_friendly %}checked{% endif %}>
+                                    <label class="form-check-label" for="prayer_friendly">
+                                        Prayer-Friendly
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="guests_allowed" name="guests_allowed" 
+                                           {% if guests_allowed %}checked{% endif %}>
+                                    <label class="form-check-label" for="guests_allowed">
+                                        Guests Allowed
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Sort -->
+                            <div class="col-md-4">
+                                <label for="sort" class="form-label">Sort By</label>
+                                <select class="form-select" id="sort" name="sort">
+                                    <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Newest First</option>
+                                    <option value="oldest" {% if sort_by == 'oldest' %}selected{% endif %}>Oldest First</option>
+                                    <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Name A-Z</option>
+                                    <option value="age_youngest" {% if sort_by == 'age_youngest' %}selected{% endif %}>Age (Youngest)</option>
+                                    <option value="age_oldest" {% if sort_by == 'age_oldest' %}selected{% endif %}>Age (Oldest)</option>
+                                </select>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary me-2">
+                                    <i class="fas fa-search me-1"></i>Apply Filters
+                                </button>
+                                <a href="{% url 'browse_profiles' %}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times me-1"></i>Clear
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="row">
+        {% if profiles %}
+            {% for profile in profiles %}
+                <div class="col-12 col-md-6 col-lg-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <a href="{{ profile.get_absolute_url }}" class="text-decoration-none text-dark">
+                            <div class="card-header bg-primary text-white text-center py-3">
+                                <h5 class="mb-0 fw-bold">{{ profile.name }}{% if profile.age %}, {{ profile.age }}{% endif %}</h5>
+                            </div>
+                            <div class="card-body text-center p-4">
+                                {% if profile.profile_photo %}
+                                    <img src="{{ profile.profile_photo.url }}" 
+                                         class="rounded-circle mb-3 shadow" 
+                                         alt="Profile photo" 
+                                         style="width: 80px; height: 80px; object-fit: cover;">
+                                {% else %}
+                                    <div class="bg-gradient-primary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center text-white shadow" 
+                                         style="width: 80px; height: 80px;">
+                                        <i class="fas fa-user fa-2x"></i>
+                                    </div>
+                                {% endif %}
+                                
+                                <h6 class="text-muted mb-3">
+                                    <i class="fas fa-map-marker-alt me-1"></i>
+                                    {% if profile.city %}{{ profile.city }}{% endif %}
+                                    {% if profile.state %}, {{ profile.state }}{% endif %}
+                                    <br>
+                                    {% if profile.gender == 'male' %}
+                                        <i class="fas fa-mars me-1"></i>Male
+                                    {% else %}
+                                        <i class="fas fa-venus me-1"></i>Female
+                                    {% endif %}
+                                </h6>
+                                
+                                {% if profile.bio %}
+                                    <p class="small text-muted mb-3">{{ profile.bio|truncatewords:20 }}</p>
+                                {% endif %}
+                                
+                                <!-- Islamic Preferences -->
+                                <div class="mb-3">
+                                    {% if profile.halal_kitchen %}
+                                        <span class="badge bg-success me-1">Halal Kitchen</span>
+                                    {% endif %}
+                                    {% if profile.prayer_friendly %}
+                                        <span class="badge bg-info me-1">Prayer-Friendly</span>
+                                    {% endif %}
+                                    {% if profile.guests_allowed %}
+                                        <span class="badge bg-warning me-1">Guests Allowed</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Looking For Status -->
+                                <div class="mb-3">
+                                    {% if profile.is_looking_for_room %}
+                                        <span class="badge bg-primary">Looking for Room</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Offering Room</span>
+                                    {% endif %}
+                                </div>
+                                
+                                {% if profile.contact_email %}
+                                    <small class="text-muted">
+                                        <i class="fas fa-envelope me-1"></i>{{ profile.contact_email }}
+                                    </small>
+                                {% endif %}
+                            </div>
+                        </a>
+                        <div class="card-footer bg-light text-center">
+                            <a href="{{ profile.get_absolute_url }}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye me-1"></i>View Profile
+                            </a>
+                            {% if user.is_authenticated and user.profile != profile %}
+                                <a href="{% url 'contact_profile' profile.id %}" class="btn btn-sm btn-primary ms-2">
+                                    <i class="fas fa-envelope me-1"></i>Contact
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">No profiles found</h4>
+                    <p class="text-muted">Try adjusting your filters or <a href="{% url 'create_profile' %}">create a profile</a>.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+        <div class="row mt-4">
+            <div class="col-12">
+                <nav aria-label="Profile pagination">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.hover-lift {
+    transition: transform 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+}
+</style>
+{% endblock %}

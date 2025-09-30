@@ -21,6 +21,7 @@ urlpatterns = [
     path('my-listings/', views.my_listings, name='my_listings'),
 
     # Profiles
+    path('profiles/', views.browse_profiles, name='browse_profiles'),
     path('create/', views.create_profile, name='create_profile'),
     path('profile/<int:profile_id>/', views.profile_detail, name='profile_detail'),
     path('profile/<int:profile_id>/edit/', views.edit_profile, name='edit_profile'),

@@ -6,6 +6,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 from .models import Profile, Room, Message, RoomType, Amenity
 from .forms import ProfileForm, RoomForm, UserRegistrationForm, MessageForm
 
@@ -114,6 +115,122 @@ def home(request):
     })
 
     return render(request, 'home_enhanced.html', context)
+
+
+def browse_profiles(request):
+    """
+    Dedicated page for browsing all profiles with advanced filtering and pagination.
+    """
+    # Get filter parameters
+    search_query = request.GET.get('search', '')
+    city_filter = request.GET.get('city', '')
+    state_filter = request.GET.get('state', '')
+    gender_filter = request.GET.get('gender', '')
+    age_min = request.GET.get('age_min', '')
+    age_max = request.GET.get('age_max', '')
+    looking_for = request.GET.get('looking_for', '')
+    halal_kitchen = request.GET.get('halal_kitchen', '')
+    prayer_friendly = request.GET.get('prayer_friendly', '')
+    guests_allowed = request.GET.get('guests_allowed', '')
+    sort_by = request.GET.get('sort', 'newest')
+    
+    # Start with all profiles
+    profiles = Profile.objects.all()
+    
+    # Exclude current user's profile if logged in
+    if request.user.is_authenticated and hasattr(request.user, 'profile'):
+        profiles = profiles.exclude(id=request.user.profile.id)
+    
+    # Apply filters
+    if search_query:
+        profiles = profiles.filter(
+            Q(name__icontains=search_query) |
+            Q(city__icontains=search_query) |
+            Q(state__icontains=search_query) |
+            Q(bio__icontains=search_query) |
+            Q(neighborhood__icontains=search_query)
+        )
+    
+    if city_filter:
+        profiles = profiles.filter(city__icontains=city_filter)
+    
+    if state_filter:
+        profiles = profiles.filter(state__icontains=state_filter)
+    
+    if gender_filter:
+        profiles = profiles.filter(gender=gender_filter)
+    
+    if age_min:
+        try:
+            profiles = profiles.filter(age__gte=int(age_min))
+        except ValueError:
+            pass
+    
+    if age_max:
+        try:
+            profiles = profiles.filter(age__lte=int(age_max))
+        except ValueError:
+            pass
+    
+    if looking_for:
+        if looking_for == 'room':
+            profiles = profiles.filter(is_looking_for_room=True)
+        elif looking_for == 'roommate':
+            profiles = profiles.filter(is_looking_for_room=False)
+        # 'both' shows all profiles
+    
+    if halal_kitchen:
+        profiles = profiles.filter(halal_kitchen=True)
+    
+    if prayer_friendly:
+        profiles = profiles.filter(prayer_friendly=True)
+    
+    if guests_allowed:
+        profiles = profiles.filter(guests_allowed=True)
+    
+    # Apply sorting
+    if sort_by == 'newest':
+        profiles = profiles.order_by('-created_at')
+    elif sort_by == 'oldest':
+        profiles = profiles.order_by('created_at')
+    elif sort_by == 'name':
+        profiles = profiles.order_by('name')
+    elif sort_by == 'age_youngest':
+        profiles = profiles.order_by('age')
+    elif sort_by == 'age_oldest':
+        profiles = profiles.order_by('-age')
+    else:
+        profiles = profiles.order_by('-created_at')
+    
+    # Pagination
+    paginator = Paginator(profiles, 12)  # Show 12 profiles per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    # Get unique values for filter dropdowns
+    cities = Profile.objects.values_list('city', flat=True).distinct().order_by('city')
+    states = Profile.objects.values_list('state', flat=True).distinct().order_by('state')
+    
+    context = {
+        'page_obj': page_obj,
+        'profiles': page_obj,
+        'cities': cities,
+        'states': states,
+        'search_query': search_query,
+        'city_filter': city_filter,
+        'state_filter': state_filter,
+        'gender_filter': gender_filter,
+        'age_min': age_min,
+        'age_max': age_max,
+        'looking_for': looking_for,
+        'halal_kitchen': halal_kitchen,
+        'prayer_friendly': prayer_friendly,
+        'guests_allowed': guests_allowed,
+        'sort_by': sort_by,
+        'total_profiles': paginator.count,
+    }
+    
+    return render(request, 'browse_profiles.html', context)
 
 
 def profile_detail(request, profile_id):
