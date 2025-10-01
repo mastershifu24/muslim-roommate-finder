@@ -35,8 +35,8 @@ class Command(BaseCommand):
                 }
             },
             {
-                'username': 'sarah_nyc',
-                'email': 'sarah.nyc@example.com',
+                'username': 'sarah_khan',
+                'email': 'sarah.khan@example.com',
                 'password': 'password123',
                 'profile': {
                     'name': 'Sarah Khan',
@@ -72,8 +72,8 @@ class Command(BaseCommand):
                 }
             },
             {
-                'username': 'malik_la',
-                'email': 'malik.la@example.com',
+                'username': 'malik_rahman',
+                'email': 'malik.rahman@example.com',
                 'password': 'password123',
                 'profile': {
                     'name': 'Malik Rahman',
@@ -109,8 +109,8 @@ class Command(BaseCommand):
                 }
             },
             {
-                'username': 'zainab_chicago',
-                'email': 'zainab.chi@example.com',
+                'username': 'zainab_ahmed',
+                'email': 'zainab.ahmed@example.com',
                 'password': 'password123',
                 'profile': {
                     'name': 'Zainab Ahmed',
@@ -146,8 +146,8 @@ class Command(BaseCommand):
                 }
             },
             {
-                'username': 'ibrahim_houston',
-                'email': 'ibrahim.hou@example.com',
+                'username': 'ibrahim_yusuf',
+                'email': 'ibrahim.yusuf@example.com',
                 'password': 'password123',
                 'profile': {
                     'name': 'Ibrahim Yusuf',
@@ -183,8 +183,8 @@ class Command(BaseCommand):
                 }
             },
             {
-                'username': 'hassan_phoenix',
-                'email': 'hassan.phx@example.com',
+                'username': 'hassan_ali',
+                'email': 'hassan.ali@example.com',
                 'password': 'password123',
                 'profile': {
                     'name': 'Hassan Ali',
@@ -197,13 +197,13 @@ class Command(BaseCommand):
                     'only_eats_zabihah': True,
                     'prayer_friendly': True,
                     'guests_allowed': True,
-                    'contact_email': 'hassan.phx@example.com'
+                    'contact_email': 'hassan.ali@example.com'
                 }
             },
             # DALLAS
             {
-                'username': 'maryam_dallas',
-                'email': 'maryam.dal@example.com',
+                'username': 'maryam_siddiqui',
+                'email': 'maryam.siddiqui@example.com',
                 'password': 'password123',
                 'profile': {
                     'name': 'Maryam Siddiqui',
@@ -216,13 +216,13 @@ class Command(BaseCommand):
                     'only_eats_zabihah': True,
                     'prayer_friendly': True,
                     'guests_allowed': True,
-                    'contact_email': 'maryam.dal@example.com'
+                    'contact_email': 'maryam.siddiqui@example.com'
                 }
             },
             # SEATTLE
             {
-                'username': 'abdullah_seattle',
-                'email': 'abdullah.sea@example.com',
+                'username': 'abdullah_malik',
+                'email': 'abdullah.malik@example.com',
                 'password': 'password123',
                 'profile': {
                     'name': 'Abdullah Malik',
@@ -244,7 +244,7 @@ class Command(BaseCommand):
         rooms_data = [
             # NEW YORK ROOMS
             {
-                'username': 'sarah_nyc',
+                'username': 'sarah_khan',
                 'rooms': [
                     {
                         'title': 'Cozy Room in Brooklyn - Sisters Only',
@@ -270,7 +270,7 @@ class Command(BaseCommand):
             },
             # LOS ANGELES ROOMS
             {
-                'username': 'malik_la',
+                'username': 'malik_rahman',
                 'rooms': [
                     {
                         'title': 'Large Room in West LA House',
@@ -311,7 +311,7 @@ class Command(BaseCommand):
                 ]
             },
             {
-                'username': 'zainab_chicago',
+                'username': 'zainab_ahmed',
                 'rooms': [
                     {
                         'title': 'Room Near Northwestern - Sisters Only',
@@ -342,7 +342,7 @@ class Command(BaseCommand):
                 ]
             },
             {
-                'username': 'ibrahim_houston',
+                'username': 'ibrahim_yusuf',
                 'rooms': [
                     {
                         'title': 'Room in Houston Near Masjid - Brothers Only',
@@ -368,7 +368,7 @@ class Command(BaseCommand):
             },
             # PHOENIX ROOMS
             {
-                'username': 'hassan_phoenix',
+                'username': 'hassan_ali',
                 'rooms': [
                     {
                         'title': 'Student Room Near ASU Campus',
@@ -394,7 +394,7 @@ class Command(BaseCommand):
             },
             # DALLAS ROOMS
             {
-                'username': 'maryam_dallas',
+                'username': 'maryam_siddiqui',
                 'rooms': [
                     {
                         'title': 'Room in Plano - Sisters Only',
@@ -410,7 +410,7 @@ class Command(BaseCommand):
             },
             # SEATTLE ROOMS
             {
-                'username': 'abdullah_seattle',
+                'username': 'abdullah_malik',
                 'rooms': [
                     {
                         'title': 'Tech Professional Room in Seattle',
