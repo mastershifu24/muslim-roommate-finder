@@ -72,12 +72,12 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="d-flex align-items-center mb-2">
-                                    {% if profile.halal_kitchen %}
+                                    {% if profile.only_eats_zabihah %}
                                         <span class="badge bg-success me-2">✓</span>
                                     {% else %}
                                         <span class="badge bg-secondary me-2">✗</span>
                                     {% endif %}
-                                    <span>Halal Kitchen</span>
+                                    <span>Only Eats Zabihah</span>
                                 </div>
                                 <div class="d-flex align-items-center mb-2">
                                     {% if profile.prayer_friendly %}
@@ -124,7 +124,7 @@
                                     <p class="small text-muted mb-1">{{ similar_profile.bio|truncatewords:10 }}</p>
                                 {% endif %}
                                 <div class="d-flex flex-wrap gap-1">
-                                    {% if similar_profile.halal_kitchen %}
+                                    {% if similar_profile.only_eats_zabihah %}
                                         <span class="badge bg-success" style="font-size: 0.7em;">Halal</span>
                                     {% endif %}
                                     {% if similar_profile.prayer_friendly %}

@@ -31,7 +31,7 @@ def home(request):
     max_price = request.GET.get('max_price', '')
     
     # Islamic preference filters
-    halal_kitchen_filter = request.GET.get('halal_kitchen', '')
+    only_eats_zabihah_filter = request.GET.get('only_eats_zabihah', '')
     prayer_friendly_filter = request.GET.get('prayer_friendly', '')
     guests_allowed_filter = request.GET.get('guests_allowed', '')
 
@@ -60,7 +60,7 @@ def home(request):
     if preference_filter:
         # Map preference filters to Profile fields
         pref_map = {
-            'halal_kitchen': 'halal_kitchen',
+            'only_eats_zabihah': 'only_eats_zabihah',
             'prayer_friendly': 'prayer_friendly',
             'guests_allowed': 'guests_allowed',
             'looking_for_room': 'is_looking_for_room',
@@ -86,7 +86,7 @@ def home(request):
         )
     if city_filter:
         available_rooms = available_rooms.filter(city__icontains=city_filter)
-    if preference_filter in ['halal_kitchen', 'prayer_friendly', 'guests_allowed']:
+    if preference_filter in ['only_eats_zabihah', 'prayer_friendly', 'guests_allowed']:
         available_rooms = available_rooms.filter(**{preference_filter: True})
 
     # Unique cities for filter dropdowns
@@ -108,7 +108,7 @@ def home(request):
     context.update({
         'min_price': min_price,
         'max_price': max_price,
-        'halal_kitchen_filter': halal_kitchen_filter,
+        'only_eats_zabihah_filter': only_eats_zabihah_filter,
         'prayer_friendly_filter': prayer_friendly_filter,
         'guests_allowed_filter': guests_allowed_filter,
         'total_matches': 42,  # Placeholder
@@ -129,7 +129,7 @@ def browse_profiles(request):
     age_min = request.GET.get('age_min', '')
     age_max = request.GET.get('age_max', '')
     looking_for = request.GET.get('looking_for', '')
-    halal_kitchen = request.GET.get('halal_kitchen', '')
+    only_eats_zabihah = request.GET.get('only_eats_zabihah', '')
     prayer_friendly = request.GET.get('prayer_friendly', '')
     guests_allowed = request.GET.get('guests_allowed', '')
     sort_by = request.GET.get('sort', 'newest')
@@ -179,8 +179,8 @@ def browse_profiles(request):
             profiles = profiles.filter(is_looking_for_room=False)
         # 'both' shows all profiles
     
-    if halal_kitchen:
-        profiles = profiles.filter(halal_kitchen=True)
+    if only_eats_zabihah:
+        profiles = profiles.filter(only_eats_zabihah=True)
     
     if prayer_friendly:
         profiles = profiles.filter(prayer_friendly=True)
@@ -223,7 +223,7 @@ def browse_profiles(request):
         'age_min': age_min,
         'age_max': age_max,
         'looking_for': looking_for,
-        'halal_kitchen': halal_kitchen,
+        'only_eats_zabihah': only_eats_zabihah,
         'prayer_friendly': prayer_friendly,
         'guests_allowed': guests_allowed,
         'sort_by': sort_by,
@@ -777,7 +777,7 @@ def create_test_account(request):
                     'state': 'NY',
                     'bio': 'Graduate student looking for a quiet place to study. I pray 5 times a day and prefer halal food.',
                     'is_looking_for_room': True,
-                    'halal_kitchen': True,
+                    'only_eats_zabihah': True,
                     'prayer_friendly': True,
                     'guests_allowed': False,
                     'contact_email': 'ahmed@example.com'
@@ -795,7 +795,7 @@ def create_test_account(request):
                     'state': 'CA',
                     'bio': 'Medical student seeking a peaceful environment. I value cleanliness and Islamic values.',
                     'is_looking_for_room': True,
-                    'halal_kitchen': True,
+                    'only_eats_zabihah': True,
                     'prayer_friendly': True,
                     'guests_allowed': True,
                     'contact_email': 'fatima@example.com'
@@ -813,7 +813,7 @@ def create_test_account(request):
                     'state': 'IL',
                     'bio': 'Software engineer with a room to rent. Looking for respectful Muslim roommate.',
                     'is_looking_for_room': False,
-                    'halal_kitchen': True,
+                    'only_eats_zabihah': True,
                     'prayer_friendly': True,
                     'guests_allowed': True,
                     'contact_email': 'omar@example.com'
@@ -831,7 +831,7 @@ def create_test_account(request):
                     'state': 'TX',
                     'bio': 'Teacher looking for a sister to share apartment. I love cooking and reading Quran.',
                     'is_looking_for_room': False,
-                    'halal_kitchen': True,
+                    'only_eats_zabihah': True,
                     'prayer_friendly': True,
                     'guests_allowed': False,
                     'contact_email': 'aisha@example.com'
@@ -849,7 +849,7 @@ def create_test_account(request):
                     'state': 'AZ',
                     'bio': 'Engineering student at ASU. Looking for affordable housing near campus.',
                     'is_looking_for_room': True,
-                    'halal_kitchen': False,
+                    'only_eats_zabihah': False,
                     'prayer_friendly': True,
                     'guests_allowed': True,
                     'contact_email': 'yusuf@example.com'
@@ -901,7 +901,7 @@ def create_test_account(request):
                     city="Chicago, IL",
                     price=800,
                     is_active=True,
-                    halal_kitchen=True,
+                    only_eats_zabihah=True,
                     prayer_friendly=True,
                     guests_allowed=True,
                     phone_number="312-555-0123"
@@ -919,7 +919,7 @@ def create_test_account(request):
                     city="Houston, TX", 
                     price=650,
                     is_active=True,
-                    halal_kitchen=True,
+                    only_eats_zabihah=True,
                     prayer_friendly=True,
                     guests_allowed=False,
                     phone_number="713-555-0456"

@@ -106,9 +106,9 @@
                             <div class="col-md-4">
                                 <label class="form-label">Islamic Preferences</label>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="halal_kitchen" name="halal_kitchen" 
-                                           {% if halal_kitchen %}checked{% endif %}>
-                                    <label class="form-check-label" for="halal_kitchen">
+                                    <input class="form-check-input" type="checkbox" id="only_eats_zabihah" name="only_eats_zabihah" 
+                                           {% if only_eats_zabihah %}checked{% endif %}>
+                                    <label class="form-check-label" for="only_eats_zabihah">
                                         Halal Kitchen
                                     </label>
                                 </div>
@@ -197,7 +197,7 @@
                                 
                                 <!-- Islamic Preferences -->
                                 <div class="mb-3">
-                                    {% if profile.halal_kitchen %}
+                                    {% if profile.only_eats_zabihah %}
                                         <span class="badge bg-success me-1">Halal Kitchen</span>
                                     {% endif %}
                                     {% if profile.prayer_friendly %}

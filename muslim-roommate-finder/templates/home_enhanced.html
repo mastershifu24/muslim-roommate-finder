@@ -235,8 +235,8 @@
                 <div class="card border-0 bg-light h-100">
                   <div class="card-body text-center p-3">
                     <div class="form-check form-switch d-flex justify-content-center">
-                      <input class="form-check-input fs-5" type="checkbox" name="halal_kitchen" 
-                             {% if halal_kitchen_filter %}checked{% endif %}>
+                      <input class="form-check-input fs-5" type="checkbox" name="only_eats_zabihah" 
+                             {% if only_eats_zabihah_filter %}checked{% endif %}>
                     </div>
                     <div class="mt-2">
                       <i class="fas fa-utensils text-success fs-4"></i>
@@ -348,7 +348,7 @@
               
               <!-- Amenities -->
               <div class="d-flex flex-wrap gap-1 mb-3">
-                {% if room.halal_kitchen %}
+                {% if room.only_eats_zabihah %}
                   <span class="badge bg-success rounded-pill">🥘 Halal Kitchen</span>
                 {% endif %}
                 {% if room.prayer_friendly %}
@@ -424,7 +424,7 @@
               
               <!-- Preferences -->
               <div class="d-flex flex-wrap gap-1 justify-content-center mb-3">
-                {% if profile.halal_kitchen %}
+                {% if profile.only_eats_zabihah %}
                   <span class="badge bg-success rounded-pill">🥘 Halal Kitchen</span>
                 {% endif %}
                 {% if profile.prayer_friendly %}

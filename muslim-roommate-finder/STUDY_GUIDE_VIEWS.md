@@ -76,7 +76,7 @@ def home(request):
     if preference_filter:
         # Map preference filters to Profile fields
         pref_map = {
-            'halal_kitchen': 'halal_kitchen',
+            'only_eats_zabihah': 'only_eats_zabihah',
             'prayer_friendly': 'prayer_friendly',
             'guests_allowed': 'guests_allowed',
             'looking_for_room': 'is_looking_for_room',
@@ -105,7 +105,7 @@ def home(request):
     if charleston_only:
         charleston_areas = ['Downtown', 'West Ashley', 'Mount Pleasant', 'James Island', 'Charleston County']
         available_rooms = available_rooms.filter(city__iregex=r'(' + '|'.join(charleston_areas) + ')')
-    if preference_filter in ['halal_kitchen', 'prayer_friendly', 'guests_allowed']:
+    if preference_filter in ['only_eats_zabihah', 'prayer_friendly', 'guests_allowed']:
         available_rooms = available_rooms.filter(**{preference_filter: True})
 
     # Unique cities for filter dropdowns

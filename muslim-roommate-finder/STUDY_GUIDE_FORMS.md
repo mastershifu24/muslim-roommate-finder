@@ -74,7 +74,7 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['name', 'age', 'gender', 'city', 'profile_photo', 'is_looking_for_room', 'bio', 'contact_email', 
-                 'halal_kitchen', 'prayer_friendly', 'guests_allowed']
+                 'only_eats_zabihah', 'prayer_friendly', 'guests_allowed']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your full name'}),
             'age': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter your age'}),
@@ -84,13 +84,13 @@ class ProfileForm(forms.ModelForm):
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Tell us about yourself, your lifestyle, and what you\'re looking for in a roommate...'}),
             'contact_email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your email address'}),
             'is_looking_for_room': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'halal_kitchen': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'only_eats_zabihah': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'prayer_friendly': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'guests_allowed': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
         labels = {
             'is_looking_for_room': 'I am looking for a room',
-            'halal_kitchen': 'Halal kitchen required',
+            'only_eats_zabihah': 'Halal kitchen required',
             'prayer_friendly': 'Prayer-friendly environment',
             'guests_allowed': 'Allow guests in shared spaces',
         }
@@ -247,7 +247,7 @@ class RoomForm(forms.ModelForm):
             'title', 'description',
             'room_type', 'amenities',
             'city', 'price', 'available_from', 'phone_number',
-            'halal_kitchen', 'prayer_friendly', 'guests_allowed',
+            'only_eats_zabihah', 'prayer_friendly', 'guests_allowed',
             'contact_email',
         ]
         widgets = {
@@ -272,7 +272,7 @@ class RoomForm(forms.ModelForm):
                 'pattern': r'[\(\)\d\s\-\+\.]+'
             }),
             'contact_email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email for contact'}),
-            'halal_kitchen': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'onl_eats_zabihah': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'prayer_friendly': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'guests_allowed': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }

@@ -17,7 +17,7 @@ class RoomImageInline(admin.TabularInline):
 class RoomAdmin(admin.ModelAdmin):
     list_display = ("title", "user", "city", "price", "available_from", "is_active", "image_count")
     search_fields = ("title", "description", "city", "user__name")
-    list_filter = ("city", "room_type", "halal_kitchen", "prayer_friendly", "guests_allowed", "is_active", "created_at")
+    list_filter = ("city", "room_type", "only_eats_zabihah", "prayer_friendly", "guests_allowed", "is_active", "created_at")
     list_editable = ("price", "available_from", "is_active")
     readonly_fields = ("slug", "created_at", "updated_at", "image_count")
     filter_horizontal = ("amenities",)
@@ -33,7 +33,7 @@ class RoomAdmin(admin.ModelAdmin):
             "fields": ("price", "available_from", "amenities", "is_active")
         }),
         ("Preferences", {
-            "fields": ("halal_kitchen", "prayer_friendly", "guests_allowed")
+            "fields": ("only_eats_zabihah", "prayer_friendly", "guests_allowed")
         }),
         ("Contact", {
             "fields": ("contact_email", "phone_number", "slug")

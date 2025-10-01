@@ -41,7 +41,7 @@ def create_test_user():
             'city': 'New York, NY',
             'bio': 'Test account for debugging',
             'is_looking_for_room': True,
-            'halal_kitchen': True,
+            'only_eats_zabihah': True,
             'prayer_friendly': True,
             'guests_allowed': True,
             'contact_email': 'test@example.com'

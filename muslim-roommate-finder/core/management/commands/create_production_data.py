@@ -57,7 +57,7 @@ class Command(BaseCommand):
                     'city': 'New York, NY',
                     'bio': 'Graduate student looking for a quiet place to study. I pray 5 times a day and prefer halal food.',
                     'is_looking_for_room': True,
-                    'halal_kitchen': True,
+                    'only_eats_zabihah': True,
                     'prayer_friendly': True,
                     'guests_allowed': False,
                     'contact_email': 'ahmed@example.com'
@@ -75,7 +75,7 @@ class Command(BaseCommand):
                     'city': 'Los Angeles, CA',
                     'bio': 'Medical student seeking a peaceful environment. I value cleanliness and Islamic values.',
                     'is_looking_for_room': True,
-                    'halal_kitchen': True,
+                    'only_eats_zabihah': True,
                     'prayer_friendly': True,
                     'guests_allowed': True,
                     'contact_email': 'fatima@example.com'
@@ -93,7 +93,7 @@ class Command(BaseCommand):
                     'city': 'Chicago, IL',
                     'bio': 'Software engineer with a room to rent. Looking for respectful Muslim roommate.',
                     'is_looking_for_room': False,
-                    'halal_kitchen': True,
+                    'only_eats_zabihah': True,
                     'prayer_friendly': True,
                     'guests_allowed': True,
                     'contact_email': 'omar@example.com'
@@ -111,7 +111,7 @@ class Command(BaseCommand):
                     'city': 'Houston, TX',
                     'bio': 'Teacher looking for a sister to share apartment. I love cooking and reading Quran.',
                     'is_looking_for_room': False,
-                    'halal_kitchen': True,
+                    'only_eats_zabihah': True,
                     'prayer_friendly': True,
                     'guests_allowed': False,
                     'contact_email': 'aisha@example.com'
@@ -129,7 +129,7 @@ class Command(BaseCommand):
                     'city': 'Phoenix, AZ',
                     'bio': 'Engineering student at ASU. Looking for affordable housing near campus.',
                     'is_looking_for_room': True,
-                    'halal_kitchen': False,
+                    'only_eats_zabihah': False,
                     'prayer_friendly': True,
                     'guests_allowed': True,
                     'contact_email': 'yusuf@example.com'
@@ -177,7 +177,7 @@ class Command(BaseCommand):
                 'price': 1200,
                 'available_from': '2024-01-15',
                 'phone_number': '+1-555-0101',
-                'halal_kitchen': True,
+                'only_eats_zabihah': True,
                 'prayer_friendly': True,
                 'guests_allowed': True,
                 'contact_email': 'omar@example.com'
@@ -189,7 +189,7 @@ class Command(BaseCommand):
                 'price': 800,
                 'available_from': '2024-02-01',
                 'phone_number': '+1-555-0102',
-                'halal_kitchen': True,
+                'only_eats_zabihah': True,
                 'prayer_friendly': True,
                 'guests_allowed': False,
                 'contact_email': 'fatima@example.com'
@@ -201,7 +201,7 @@ class Command(BaseCommand):
                 'price': 950,
                 'available_from': '2024-01-01',
                 'phone_number': '+1-555-0103', 
-                'halal_kitchen': True,
+                'only_eats_zabihah': True,
                 'prayer_friendly': True,
                 'guests_allowed': True,
                 'contact_email': 'omar@example.com'
@@ -213,7 +213,7 @@ class Command(BaseCommand):
                 'price': 650,
                 'available_from': '2024-03-01',
                 'phone_number': '+1-555-0104',
-                'halal_kitchen': True,
+                'only_eats_zabihah': True,
                 'prayer_friendly': True,
                 'guests_allowed': False,
                 'contact_email': 'aisha@example.com'
@@ -225,7 +225,7 @@ class Command(BaseCommand):
                 'price': 575,
                 'available_from': '2024-02-15',
                 'phone_number': '+1-555-0105',
-                'halal_kitchen': False,
+                'only_eats_zabihah': False,
                 'prayer_friendly': True,
                 'guests_allowed': True,
                 'contact_email': 'yusuf@example.com'

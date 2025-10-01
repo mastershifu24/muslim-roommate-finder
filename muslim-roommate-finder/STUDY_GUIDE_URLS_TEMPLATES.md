@@ -445,7 +445,7 @@ templates/
                     <label for="preference" class="form-label">Preference</label>
                     <select class="form-select" id="preference" name="preference">
                         <option value="">All Preferences</option>
-                        <option value="halal_kitchen" {% if preference_filter == 'halal_kitchen' %}selected{% endif %}>Halal Kitchen</option>
+                        <option value="only_eats_zabihah" {% if preference_filter == 'only_eats_zabihah' %}selected{% endif %}>Only Eats Zabihah</option>
                         <option value="prayer_friendly" {% if preference_filter == 'prayer_friendly' %}selected{% endif %}>Prayer Friendly</option>
                         <option value="guests_allowed" {% if preference_filter == 'guests_allowed' %}selected{% endif %}>Guests Allowed</option>
                         <option value="looking_for_room" {% if preference_filter == 'looking_for_room' %}selected{% endif %}>Looking for Room</option>
@@ -499,7 +499,7 @@ templates/
                                     </div>
                                     
                                     <div class="d-flex flex-wrap gap-1">
-                                        {% if room.halal_kitchen %}
+                                        {% if room.only_eats_zabihah %}
                                             <span class="badge bg-success">Halal Kitchen</span>
                                         {% endif %}
                                         {% if room.prayer_friendly %}
@@ -547,7 +547,7 @@ templates/
                                     </div>
                                     
                                     <div class="d-flex flex-wrap gap-1">
-                                        {% if profile.halal_kitchen %}
+                                        {% if profile.only_eats_zabihah %}
                                             <span class="badge bg-success">Halal Kitchen</span>
                                         {% endif %}
                                         {% if profile.prayer_friendly %}
@@ -632,8 +632,8 @@ templates/
                     
                     <h6>Preferences</h6>
                     <div class="d-flex flex-wrap gap-2">
-                        {% if profile.halal_kitchen %}
-                            <span class="badge bg-success">Halal Kitchen</span>
+                        {% if profile.only_eats_zabihah %}
+                            <span class="badge bg-success">Only Eats Zabihah</span>
                         {% endif %}
                         {% if profile.prayer_friendly %}
                             <span class="badge bg-info">Prayer Friendly</span>

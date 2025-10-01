@@ -5,7 +5,7 @@ from core.models import Profile
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ("name", "user", "city", "state", "age", "gender")
     search_fields = ("name", "user__username", "city", "neighborhood", "bio")
-    list_filter = ("gender", "city", "state", "is_looking_for_room", "halal_kitchen", "prayer_friendly")
+    list_filter = ("gender", "city", "state", "is_looking_for_room", "only_eats_zabihah", "prayer_friendly")
     list_editable = ("city", "state", "age")
     readonly_fields = ("slug",)
     fieldsets = (
@@ -16,7 +16,7 @@ class ProfileAdmin(admin.ModelAdmin):
             "fields": ("city", "state", "neighborhood", "zip_code")
         }),
         ("Preferences", {
-            "fields": ("is_looking_for_room", "halal_kitchen", "prayer_friendly", "guests_allowed")
+            "fields": ("is_looking_for_room", "only_eats_zabihah", "prayer_friendly", "guests_allowed")
         }),
         ("Contact & Bio", {
             "fields": ("contact_email", "bio", "slug")

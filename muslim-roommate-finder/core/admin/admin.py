@@ -22,13 +22,13 @@ class CustomUserAdmin(admin.ModelAdmin):
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ("name", "user", "city", "state", "age", "gender")
     search_fields = ("name", "user__username", "city", "neighborhood", "bio")
-    list_filter = ("gender", "city", "state", "is_looking_for_room", "halal_kitchen", "prayer_friendly")
+    list_filter = ("gender", "city", "state", "is_looking_for_room", "only_eats_zabihah", "prayer_friendly")
     list_editable = ("city", "state", "age")
     readonly_fields = ("slug",)
     fieldsets = (
         ("Basic Info", {"fields": ("user", "name", "age", "gender")}),
         ("Location", {"fields": ("city", "state", "neighborhood", "zip_code")}),
-        ("Preferences", {"fields": ("is_looking_for_room", "halal_kitchen", "prayer_friendly", "guests_allowed")}),
+        ("Preferences", {"fields": ("is_looking_for_room", "only_eats_zabihah", "prayer_friendly", "guests_allowed")}),
         ("Contact & Bio", {"fields": ("contact_email", "bio", "slug")}),
     )
 
@@ -71,7 +71,7 @@ class RoomImageInline(admin.TabularInline):
 class RoomAdmin(admin.ModelAdmin):
     list_display = ("title", "user", "city", "neighborhood", "price", "available_from", "is_active", "image_count")
     search_fields = ("title", "description", "city", "neighborhood", "user__name")
-    list_filter = ("city", "room_type", "halal_kitchen", "prayer_friendly", "guests_allowed", "is_active", "created_at")
+    list_filter = ("city", "room_type", "only_eats_zabihah", "prayer_friendly", "guests_allowed", "is_active", "created_at")
     list_editable = ("price", "available_from", "is_active")
     readonly_fields = ("slug", "created_at", "updated_at", "image_count")
     filter_horizontal = ("amenities",)
@@ -80,7 +80,7 @@ class RoomAdmin(admin.ModelAdmin):
         ("Basic Info", {"fields": ("user", "title", "description", "room_type")}),
         ("Location", {"fields": ("city", "neighborhood")}),
         ("Details", {"fields": ("price", "available_from", "amenities", "is_active")}),
-        ("Preferences", {"fields": ("halal_kitchen", "prayer_friendly", "guests_allowed")}),
+        ("Preferences", {"fields": ("only_eats_zabihah", "prayer_friendly", "guests_allowed")}),
         ("Contact", {"fields": ("contact_email", "slug")}),
         ("Timestamps", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
     )

@@ -126,7 +126,7 @@ class Migration(migrations.Migration):
                     models.BooleanField(default=False, verbose_name="Looking for Room"),
                 ),
                 (
-                    "halal_kitchen",
+                    "only_eats_zabihah",
                     models.BooleanField(
                         default=False, verbose_name="Prefers Halal Kitchen"
                     ),
@@ -323,7 +323,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "halal_kitchen",
+                    "only_eats_zabihah",
                     models.BooleanField(default=False, verbose_name="Halal Kitchen"),
                 ),
                 (

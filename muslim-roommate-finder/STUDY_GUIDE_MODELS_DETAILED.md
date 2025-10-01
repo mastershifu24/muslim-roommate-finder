@@ -82,7 +82,7 @@ class Profile(models.Model):
         null=True, blank=True
     )
     is_looking_for_room = models.BooleanField(default=False, verbose_name="Looking for Room")
-    halal_kitchen = models.BooleanField(default=False, verbose_name="Prefers Halal Kitchen")
+    only_eats_zabihah = models.BooleanField(default=False, verbose_name="Prefers Halal Kitchen")
     prayer_friendly = models.BooleanField(default=False, verbose_name="Prefers Prayer-Friendly Environment")
     guests_allowed = models.BooleanField(default=True, verbose_name="Allows Guests")
     bio = models.TextField(blank=True, verbose_name="Biography")
@@ -265,7 +265,7 @@ class Room(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="Monthly Rent")  # No cents
     available_from = models.DateField(null=True, blank=True, verbose_name="Available From")
     phone_number = models.CharField(max_length=15, blank=True, verbose_name="Phone Number (Optional)")
-    halal_kitchen = models.BooleanField(default=False, verbose_name="Halal Kitchen")
+    only_eats_zabihah = models.BooleanField(default=False, verbose_name="Halal Kitchen")
     prayer_friendly = models.BooleanField(default=False, verbose_name="Prayer-Friendly")
     guests_allowed = models.BooleanField(default=True, verbose_name="Guests Allowed")
     slug = models.SlugField(unique=True, blank=True, verbose_name="URL Slug")

@@ -243,7 +243,7 @@ class ProfileForm(forms.ModelForm):
         fields = [
             'name', 'age', 'gender', 'city', 'neighborhood', 
             'is_looking_for_room', 'bio', 'contact_email',
-            'halal_kitchen', 'prayer_friendly', 'guests_allowed',
+            'only_eats_zabihah', 'prayer_friendly', 'guests_allowed',
             'profile_image'  # Add this field
         ]
         widgets = {

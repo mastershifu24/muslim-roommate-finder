@@ -88,7 +88,7 @@ class Command(BaseCommand):
                 profile.city = random.choice(cities)
                 profile.neighborhood = random.choice(neighborhoods)
                 profile.is_looking_for_room = random.choice([True, False])
-                profile.halal_kitchen = random.choice([True, False])
+                profile.only_eats_zabihah = random.choice([True, False])
                 profile.prayer_friendly = random.choice([True, False])
                 profile.guests_allowed = random.choice([True, False])
                 profile.bio = f'This is a sample bio for User {i+1}. Looking for a great roommate!'
@@ -104,7 +104,7 @@ class Command(BaseCommand):
                     city=random.choice(cities),
                     neighborhood=random.choice(neighborhoods),
                     is_looking_for_room=random.choice([True, False]),
-                    halal_kitchen=random.choice([True, False]),
+                    only_eats_zabihah=random.choice([True, False]),
                     prayer_friendly=random.choice([True, False]),
                     guests_allowed=random.choice([True, False]),
                     bio=f'This is a sample bio for User {i+1}. Looking for a great roommate!',
@@ -142,7 +142,7 @@ class Command(BaseCommand):
                     'neighborhood': neighborhood,
                     'price': Decimal(str(random.randint(600, 1200))),
                     'available_from': date.today() + timedelta(days=random.randint(1, 30)),
-                    'halal_kitchen': random.choice([True, False]),
+                    'only_eats_zabihah': random.choice([True, False]),
                     'prayer_friendly': random.choice([True, False]),
                     'guests_allowed': random.choice([True, False]),
                     'contact_email': owner.contact_email or owner.user.email,
