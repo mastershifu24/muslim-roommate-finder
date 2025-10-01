@@ -78,6 +78,14 @@ def home(request):
 
     # Filter Rooms
     available_rooms = Room.objects.filter(is_active=True)
+    
+    # Automatically filter by user's city if logged in and no explicit city filter
+    if request.user.is_authenticated and hasattr(request.user, 'profile'):
+        user_city = request.user.profile.city
+        # If user has a city and hasn't explicitly filtered by another city, show their city
+        if user_city and not city_filter:
+            available_rooms = available_rooms.filter(city__icontains=user_city)
+    
     if search_query:
         available_rooms = available_rooms.filter(
             Q(title__icontains=search_query) |
@@ -503,8 +511,20 @@ def advanced_search(request):
     available_date = request.GET.get('available', '')
     room_type = request.GET.get('room_type', '')
     amenities = request.GET.getlist('amenities')
+    city_filter = request.GET.get('city', '')
 
     rooms = Room.objects.filter(is_active=True)
+
+    # Automatically filter by user's city if logged in and no explicit city filter
+    if request.user.is_authenticated and hasattr(request.user, 'profile'):
+        user_city = request.user.profile.city
+        # If user has a city and hasn't explicitly filtered by another city, show their city
+        if user_city and not city_filter:
+            rooms = rooms.filter(city__icontains=user_city)
+    
+    # Apply explicit city filter if provided
+    if city_filter:
+        rooms = rooms.filter(city__icontains=city_filter)
 
     if min_rent:
         rooms = rooms.filter(price__gte=min_rent)
