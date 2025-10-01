@@ -783,8 +783,9 @@ def create_test_account(request):
     Visit: /create-test-account/ to create all sample accounts
     """
     try:
-        # Sample users data
+        # Sample users data - diverse cities for testing
         users_data = [
+            # NEW YORK
             {
                 'username': 'ahmed_hassan',
                 'email': 'ahmed@example.com',
@@ -804,6 +805,25 @@ def create_test_account(request):
                 }
             },
             {
+                'username': 'sarah_khan',
+                'email': 'sarah.khan@example.com',
+                'password': 'password123',
+                'profile': {
+                    'name': 'Sarah Khan',
+                    'age': 27,
+                    'gender': 'female',
+                    'city': 'New York',
+                    'state': 'NY',
+                    'bio': 'Nurse with a spare room in Brooklyn. Looking for a respectful Muslim sister.',
+                    'is_looking_for_room': False,
+                    'only_eats_zabihah': True,
+                    'prayer_friendly': True,
+                    'guests_allowed': True,
+                    'contact_email': 'sarah.khan@example.com'
+                }
+            },
+            # LOS ANGELES
+            {
                 'username': 'fatima_ali',
                 'email': 'fatima@example.com',
                 'password': 'password123',
@@ -821,6 +841,25 @@ def create_test_account(request):
                     'contact_email': 'fatima@example.com'
                 }
             },
+            {
+                'username': 'malik_rahman',
+                'email': 'malik.rahman@example.com',
+                'password': 'password123',
+                'profile': {
+                    'name': 'Malik Rahman',
+                    'age': 30,
+                    'gender': 'male',
+                    'city': 'Los Angeles',
+                    'state': 'CA',
+                    'bio': 'Film producer with a large house in West LA. Have 2 rooms available.',
+                    'is_looking_for_room': False,
+                    'only_eats_zabihah': True,
+                    'prayer_friendly': True,
+                    'guests_allowed': True,
+                    'contact_email': 'malik.rahman@example.com'
+                }
+            },
+            # CHICAGO
             {
                 'username': 'omar_ibrahim',
                 'email': 'omar@example.com',
@@ -840,6 +879,25 @@ def create_test_account(request):
                 }
             },
             {
+                'username': 'zainab_ahmed',
+                'email': 'zainab.ahmed@example.com',
+                'password': 'password123',
+                'profile': {
+                    'name': 'Zainab Ahmed',
+                    'age': 24,
+                    'gender': 'female',
+                    'city': 'Chicago',
+                    'state': 'IL',
+                    'bio': 'Graduate student at Northwestern. Have a room available near campus.',
+                    'is_looking_for_room': False,
+                    'only_eats_zabihah': True,
+                    'prayer_friendly': True,
+                    'guests_allowed': False,
+                    'contact_email': 'zainab.ahmed@example.com'
+                }
+            },
+            # HOUSTON
+            {
                 'username': 'aisha_mohammed',
                 'email': 'aisha@example.com',
                 'password': 'password123',
@@ -858,6 +916,25 @@ def create_test_account(request):
                 }
             },
             {
+                'username': 'ibrahim_yusuf',
+                'email': 'ibrahim.yusuf@example.com',
+                'password': 'password123',
+                'profile': {
+                    'name': 'Ibrahim Yusuf',
+                    'age': 32,
+                    'gender': 'male',
+                    'city': 'Houston',
+                    'state': 'TX',
+                    'bio': 'Engineer at an energy company. Have extra rooms in my house near the Masjid.',
+                    'is_looking_for_room': False,
+                    'only_eats_zabihah': True,
+                    'prayer_friendly': True,
+                    'guests_allowed': True,
+                    'contact_email': 'ibrahim.yusuf@example.com'
+                }
+            },
+            # PHOENIX
+            {
                 'username': 'yusuf_ahmed',
                 'email': 'yusuf@example.com',
                 'password': 'password123',
@@ -874,7 +951,63 @@ def create_test_account(request):
                     'guests_allowed': True,
                     'contact_email': 'yusuf@example.com'
                 }
-            }
+            },
+            {
+                'username': 'hassan_ali',
+                'email': 'hassan.ali@example.com',
+                'password': 'password123',
+                'profile': {
+                    'name': 'Hassan Ali',
+                    'age': 29,
+                    'gender': 'male',
+                    'city': 'Phoenix',
+                    'state': 'AZ',
+                    'bio': 'Business owner with rooms near ASU campus. Great for students.',
+                    'is_looking_for_room': False,
+                    'only_eats_zabihah': True,
+                    'prayer_friendly': True,
+                    'guests_allowed': True,
+                    'contact_email': 'hassan.ali@example.com'
+                }
+            },
+            # DALLAS
+            {
+                'username': 'maryam_siddiqui',
+                'email': 'maryam.siddiqui@example.com',
+                'password': 'password123',
+                'profile': {
+                    'name': 'Maryam Siddiqui',
+                    'age': 28,
+                    'gender': 'female',
+                    'city': 'Dallas',
+                    'state': 'TX',
+                    'bio': 'Healthcare professional with a room available in Plano area.',
+                    'is_looking_for_room': False,
+                    'only_eats_zabihah': True,
+                    'prayer_friendly': True,
+                    'guests_allowed': True,
+                    'contact_email': 'maryam.siddiqui@example.com'
+                }
+            },
+            # SEATTLE
+            {
+                'username': 'abdullah_malik',
+                'email': 'abdullah.malik@example.com',
+                'password': 'password123',
+                'profile': {
+                    'name': 'Abdullah Malik',
+                    'age': 26,
+                    'gender': 'male',
+                    'city': 'Seattle',
+                    'state': 'WA',
+                    'bio': 'Software developer at tech company. Have a room in my apartment near downtown.',
+                    'is_looking_for_room': False,
+                    'only_eats_zabihah': False,
+                    'prayer_friendly': True,
+                    'guests_allowed': True,
+                    'contact_email': 'abdullah.malik@example.com'
+                }
+            },
         ]
         
         created_accounts = []
@@ -908,53 +1041,57 @@ def create_test_account(request):
                 'profile_updated': not profile_created
             })
         
-        # Create sample room listings
-        omar_user = User.objects.get(username='omar_ibrahim')
-        if hasattr(omar_user, 'profile'):
-            # Check if Omar already has rooms
-            if not Room.objects.filter(user=omar_user.profile).exists():
-                # Create a room for Omar
-                Room.objects.create(
-                    user=omar_user.profile,
-                    title="Shared Apartment in Chicago - Muslim Friendly",
-                    description="Software engineer offering a room in my 2-bedroom apartment. Located in a quiet neighborhood with easy access to downtown Chicago. I value cleanliness and Islamic principles. Perfect for a working professional or graduate student.",
-                    city="Chicago, IL",
-                    price=800,
-                    is_active=True,
-                    only_eats_zabihah=True,
-                    prayer_friendly=True,
-                    guests_allowed=True,
-                    phone_number="312-555-0123"
-                )
+        # Create sample room listings for multiple cities
+        room_creators = [
+            ('sarah_khan', 'Cozy Room in Brooklyn - Sisters Only', 'New York', 1200),
+            ('malik_rahman', 'Large Room in West LA House', 'Los Angeles', 1400),
+            ('omar_ibrahim', 'Modern Room in Downtown Chicago', 'Chicago', 900),
+            ('zainab_ahmed', 'Room Near Northwestern - Sisters Only', 'Chicago', 850),
+            ('aisha_mohammed', "Sister's Room in Houston - Islamic Environment", 'Houston', 700),
+            ('ibrahim_yusuf', 'Room in Houston Near Masjid - Brothers Only', 'Houston', 750),
+            ('hassan_ali', 'Student Room Near ASU Campus', 'Phoenix', 600),
+            ('maryam_siddiqui', 'Room in Plano - Sisters Only', 'Dallas', 800),
+            ('abdullah_malik', 'Tech Professional Room in Seattle', 'Seattle', 1100),
+        ]
         
-        # Create a room for Aisha
-        aisha_user = User.objects.get(username='aisha_mohammed')
-        if hasattr(aisha_user, 'profile'):
-            # Check if Aisha already has this specific room
-            if not Room.objects.filter(user=aisha_user.profile, title__contains="Sister's Room").exists():
-                Room.objects.create(
-                    user=aisha_user.profile,
-                    title="Sister's Room in Houston - Islamic Environment",
-                    description="Teacher offering a room for a Muslim sister in my apartment. I love cooking halal meals and reading Quran. Looking for someone who shares similar values and lifestyle. Very clean and peaceful environment.",
-                    city="Houston, TX", 
-                    price=650,
-                    is_active=True,
-                    only_eats_zabihah=True,
-                    prayer_friendly=True,
-                    guests_allowed=False,
-                    phone_number="713-555-0456"
-                )
+        for username, title, city, price in room_creators:
+            try:
+                user = User.objects.get(username=username)
+                if hasattr(user, 'profile'):
+                    # Check if room already exists
+                    if not Room.objects.filter(user=user.profile, title=title).exists():
+                        Room.objects.create(
+                            user=user.profile,
+                            title=title,
+                            description=f"Room available in {city}. Contact for more details.",
+                            city=city,
+                            price=price,
+                            is_active=True,
+                            only_eats_zabihah=True,
+                            prayer_friendly=True,
+                            guests_allowed=True,
+                            phone_number="555-0123"
+                        )
+            except User.DoesNotExist:
+                continue
         
         return JsonResponse({
             'success': True,
             'message': 'Sample accounts processed successfully! (Existing accounts updated with latest data)',
             'accounts': created_accounts,
             'login_info': [
-                'ahmed_hassan / password123',
-                'fatima_ali / password123', 
-                'omar_ibrahim / password123',
-                'aisha_mohammed / password123',
-                'yusuf_ahmed / password123'
+                'ahmed_hassan / password123 (New York)',
+                'sarah_khan / password123 (New York)',
+                'fatima_ali / password123 (Los Angeles)', 
+                'malik_rahman / password123 (Los Angeles)',
+                'omar_ibrahim / password123 (Chicago)',
+                'zainab_ahmed / password123 (Chicago)',
+                'aisha_mohammed / password123 (Houston)',
+                'ibrahim_yusuf / password123 (Houston)',
+                'yusuf_ahmed / password123 (Phoenix)',
+                'hassan_ali / password123 (Phoenix)',
+                'maryam_siddiqui / password123 (Dallas)',
+                'abdullah_malik / password123 (Seattle)'
             ]
         })
     except Exception as e:
