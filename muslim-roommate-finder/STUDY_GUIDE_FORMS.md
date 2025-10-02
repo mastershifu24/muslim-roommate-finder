@@ -90,7 +90,7 @@ class ProfileForm(forms.ModelForm):
         }
         labels = {
             'is_looking_for_room': 'I am looking for a room',
-            'only_eats_zabihah': 'Halal kitchen required',
+            'only_eats_zabihah': 'Only Eats Zabihah required',
             'prayer_friendly': 'Prayer-friendly environment',
             'guests_allowed': 'Allow guests in shared spaces',
         }

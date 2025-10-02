@@ -500,7 +500,7 @@ templates/
                                     
                                     <div class="d-flex flex-wrap gap-1">
                                         {% if room.only_eats_zabihah %}
-                                            <span class="badge bg-success">Halal Kitchen</span>
+                                            <span class="badge bg-success">Only Eats Zabihah</span>
                                         {% endif %}
                                         {% if room.prayer_friendly %}
                                             <span class="badge bg-info">Prayer Friendly</span>
@@ -548,7 +548,7 @@ templates/
                                     
                                     <div class="d-flex flex-wrap gap-1">
                                         {% if profile.only_eats_zabihah %}
-                                            <span class="badge bg-success">Halal Kitchen</span>
+                                            <span class="badge bg-success">Only Eats Zabihah</span>
                                         {% endif %}
                                         {% if profile.prayer_friendly %}
                                             <span class="badge bg-info">Prayer Friendly</span>
