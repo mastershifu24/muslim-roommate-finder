@@ -38,10 +38,15 @@
     <h2 class="mb-0">{{ room.title }}</h2>
   </div>
   <div class="card-body">
-    {% if room.image %}
-      <img src="{{ room.image.url }}" class="img-fluid mb-3 rounded" alt="Room image">
+    {% if room.primary_image %}
+      <img src="{{ room.primary_image.image.url }}" class="img-fluid mb-3 rounded" alt="Room image">
     {% else %}
-      <img src="{% static 'images/no-image.jpg' %}" class="img-fluid mb-3 rounded" alt="No image available">
+      <div class="bg-gradient-success d-flex align-items-center justify-content-center text-white mb-3 rounded" style="height: 300px;">
+        <div class="text-center">
+          <i class="fas fa-home fa-4x opacity-50 mb-3"></i>
+          <p class="mb-0">No image available</p>
+        </div>
+      </div>
     {% endif %}
 
     <p class="text-muted mb-1"><strong>Location:</strong> {{ room.city }}{% if room.neighborhood %} • {{ room.neighborhood }}{% endif %}</p>
