@@ -1,7 +1,7 @@
 from django.contrib import admin
 from core.models import (
     Profile, RoommateProfile, Contact, Message, Room, RoomType, 
-    Amenity, RoomImage, RoomReview, RoomFavorite, RoomVerification
+    Amenity, RoomImage, RoomReview, RoomFavorite, RoomVerification, Favorite
 )
 
 # Import admin classes
@@ -36,3 +36,10 @@ class RoomVerificationAdmin(admin.ModelAdmin):
     list_display = ("room", "is_verified")
     list_filter = ("is_verified",)
     list_editable = ("is_verified",)
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ("user", "room", "profile", "created_at")
+    search_fields = ("user__username", "room__title", "profile__name")
+    list_filter = ("created_at",)
+    readonly_fields = ("created_at",)

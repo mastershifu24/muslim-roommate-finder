@@ -44,6 +44,9 @@ urlpatterns = [
     
     # Debug endpoint
     path('create-test-account/', views.create_test_account, name='create_test_account'),
+    
+    # Favorites
+    path('toggle-favorite/', views.toggle_favorite, name='toggle_favorite'),
 ]
 
 # Serve media files in both development and production

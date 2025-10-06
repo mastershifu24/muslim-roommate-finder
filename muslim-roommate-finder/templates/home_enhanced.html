@@ -4,6 +4,9 @@
 {% block title %}Home - Muslim Roommate Finder{% endblock %}
 
 {% block content %}
+<!-- CSRF Token for AJAX -->
+{% csrf_token %}
+
 <!-- Hero Section -->
 <div class="hero-section bg-gradient-primary text-white rounded-4 p-5 mb-5 text-center position-relative overflow-hidden">
   <div class="position-absolute top-0 start-0 w-100 h-100 opacity-10">
@@ -36,7 +39,7 @@
 <!-- Stats Cards -->
 <div class="row mb-5">
   <div class="col-md-4 mb-3">
-    <div class="card border-0 shadow-sm h-100 hover-lift">
+    <div class="profile-card h-100 hover-lift">
       <div class="card-body text-center p-4">
         <div class="display-4 text-primary mb-3">🏠</div>
         <h3 class="card-title text-primary fw-bold">{{ rooms_count|default:0 }}</h3>
@@ -45,7 +48,7 @@
     </div>
   </div>
   <div class="col-md-4 mb-3">
-    <div class="card border-0 shadow-sm h-100 hover-lift">
+    <div class="profile-card h-100 hover-lift">
       <div class="card-body text-center p-4">
         <div class="display-4 text-info mb-3">👥</div>
         <h3 class="card-title text-info fw-bold">{{ profile_count|default:0 }}</h3>
@@ -54,7 +57,7 @@
     </div>
   </div>
   <div class="col-md-4 mb-3">
-    <div class="card border-0 shadow-sm h-100 hover-lift">
+    <div class="profile-card h-100 hover-lift">
       <div class="card-body text-center p-4">
         <div class="display-4 text-success mb-3">🤝</div>
         <h3 class="card-title text-success fw-bold">{{ total_matches|default:42 }}</h3>
@@ -318,12 +321,12 @@
   <div class="row" id="roomsGrid">
     {% for room in available_rooms %}
       <div class="col-12 col-md-6 col-lg-4 mb-4">
-        <div class="card border-0 shadow-sm h-100 hover-lift">
+        <div class="profile-card h-100 hover-lift">
           <a href="{% url 'room_detail' room.id %}" class="text-decoration-none text-dark">
             <div class="position-relative">
               {% if room.primary_image %}
-                <img src="{{ room.primary_image.image.url }}" class="card-img-top" 
-                     alt="Room image" style="height: 200px; object-fit: cover;">
+                <img src="{{ room.primary_image.image.url }}" class="room-image" 
+                     alt="Room image">
               {% else %}
                 <div class="bg-gradient-success d-flex align-items-center justify-content-center text-white" 
                      style="height: 200px;">
@@ -335,6 +338,15 @@
                   {{ room.get_price_display }}/mo
                 </span>
               </div>
+              {% if user.is_authenticated %}
+                <div class="position-absolute top-0 start-0 m-3">
+                  <button class="btn btn-sm btn-light rounded-circle favorite-btn" 
+                          data-type="room" data-id="{{ room.id }}" 
+                          style="width: 40px; height: 40px; padding: 0;">
+                    <i class="fas fa-heart text-muted"></i>
+                  </button>
+                </div>
+              {% endif %}
             </div>
             
             <div class="card-body p-4">
@@ -389,7 +401,7 @@
   <div class="row">
     {% for profile in profiles %}
       <div class="col-12 col-md-6 col-lg-4 mb-4">
-        <div class="card border-0 shadow-sm h-100 hover-lift">
+        <div class="profile-card h-100 hover-lift">
           <a href="{{ profile.get_absolute_url }}" class="text-decoration-none text-dark">
             <div class="card-header bg-primary text-white text-center py-3">
               <h5 class="mb-0 fw-bold">{{ profile.name }}, {{ profile.age }}</h5>
@@ -397,9 +409,8 @@
             <div class="card-body text-center p-4">
               {% if profile.profile_photo %}
                 <img src="{{ profile.profile_photo.url }}" 
-                     class="rounded-circle mb-3 shadow" 
-                     alt="Profile photo" 
-                     style="width: 80px; height: 80px; object-fit: cover;">
+                     class="profile-avatar mb-3" 
+                     alt="Profile photo">
               {% else %}
                 <div class="bg-gradient-primary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center text-white shadow" 
                      style="width: 80px; height: 80px;">
@@ -547,6 +558,56 @@ document.addEventListener('DOMContentLoaded', function() {
     input.addEventListener('change', function() {
       // Optional: Auto-submit on change
       // form.submit();
+    });
+  });
+
+  // Favorite functionality
+  const favoriteButtons = document.querySelectorAll('.favorite-btn');
+  favoriteButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const type = this.dataset.type;
+      const id = this.dataset.id;
+      const icon = this.querySelector('i');
+      
+      // Add loading state
+      icon.className = 'fas fa-spinner fa-spin';
+      this.disabled = true;
+      
+      fetch('/toggle-favorite/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: `type=${type}&id=${id}`
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          if (data.is_favorited) {
+            icon.className = 'fas fa-heart text-danger';
+            this.classList.add('btn-danger');
+            this.classList.remove('btn-light');
+          } else {
+            icon.className = 'fas fa-heart text-muted';
+            this.classList.remove('btn-danger');
+            this.classList.add('btn-light');
+          }
+        } else {
+          console.error('Error:', data.error);
+          icon.className = 'fas fa-heart text-muted';
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        icon.className = 'fas fa-heart text-muted';
+      })
+      .finally(() => {
+        this.disabled = false;
+      });
     });
   });
 });

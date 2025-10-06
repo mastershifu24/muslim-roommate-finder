@@ -1099,3 +1099,56 @@ def create_test_account(request):
             'success': False,
             'error': str(e)
         })
+
+
+@login_required
+def toggle_favorite(request):
+    """Toggle favorite status for rooms or profiles"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Invalid method'})
+    
+    try:
+        item_type = request.POST.get('type')  # 'room' or 'profile'
+        item_id = request.POST.get('id')
+        
+        if not item_type or not item_id:
+            return JsonResponse({'success': False, 'error': 'Missing parameters'})
+        
+        from core.models import Favorite
+        
+        if item_type == 'room':
+            room = get_object_or_404(Room, id=item_id)
+            favorite, created = Favorite.objects.get_or_create(
+                user=request.user,
+                room=room
+            )
+            if not created:
+                favorite.delete()
+                is_favorited = False
+            else:
+                is_favorited = True
+                
+        elif item_type == 'profile':
+            profile = get_object_or_404(Profile, id=item_id)
+            favorite, created = Favorite.objects.get_or_create(
+                user=request.user,
+                profile=profile
+            )
+            if not created:
+                favorite.delete()
+                is_favorited = False
+            else:
+                is_favorited = True
+        else:
+            return JsonResponse({'success': False, 'error': 'Invalid type'})
+        
+        return JsonResponse({
+            'success': True,
+            'is_favorited': is_favorited
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        })

@@ -435,6 +435,29 @@ class RoomReview(models.Model):
     def __str__(self):
         return f"{self.reviewer.name} review of {self.room.title}: {self.rating}/5"
 
+
+class Favorite(models.Model):
+    """Model for user favorites - rooms and profiles"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="User")
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Room")
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Profile")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
+
+    class Meta:
+        verbose_name = "Favorite"
+        verbose_name_plural = "Favorites"
+        unique_together = [
+            ('user', 'room'),
+            ('user', 'profile')
+        ]
+
+    def __str__(self):
+        if self.room:
+            return f"{self.user.username} ❤️ {self.room.title}"
+        elif self.profile:
+            return f"{self.user.username} ❤️ {self.profile.name}"
+        return f"{self.user.username} ❤️ Favorite"
+
 # --- Signals ---
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
