@@ -1104,6 +1104,25 @@ def create_test_account(request):
         })
 
 
+def image_test(request):
+    """Test page to debug image display"""
+    from django.conf import settings
+    rooms = Room.objects.all().prefetch_related('images')
+    profiles = Profile.objects.all()
+    
+    context = {
+        'debug': settings.DEBUG,
+        'media_url': settings.MEDIA_URL,
+        'rooms_count': Room.objects.count(),
+        'images_count': Room.objects.first().images.count() if Room.objects.exists() else 0,
+        'profiles_count': Profile.objects.count(),
+        'profiles_with_photos': Profile.objects.exclude(profile_photo='').count(),
+        'rooms': rooms,
+        'profiles': profiles,
+    }
+    return render(request, 'image_test.html', context)
+
+
 @login_required
 def toggle_favorite(request):
     """Toggle favorite status for rooms or profiles"""

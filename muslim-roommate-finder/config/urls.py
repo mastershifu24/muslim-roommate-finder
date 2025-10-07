@@ -42,13 +42,15 @@ urlpatterns = [
     path('rooms/<int:room_id>/messages/', views.message_list_create, name='message_list_create'),
     path('rooms/<int:room_id>/messages/<int:pk>/', views.message_edit_delete, name='message_edit_delete'),
     
-    # Debug endpoint
+    # Debug endpoints
     path('create-test-account/', views.create_test_account, name='create_test_account'),
+    path('image-test/', views.image_test, name='image_test'),
     
     # Favorites
     path('toggle-favorite/', views.toggle_favorite, name='toggle_favorite'),
 ]
 
-# Serve media files in both development and production
-# Note: For production, consider using a CDN or cloud storage
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Serve media files in development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
