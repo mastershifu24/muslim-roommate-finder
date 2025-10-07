@@ -7,10 +7,12 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.core.paginator import Paginator
+from django.views.decorators.cache import cache_page
 from .models import Profile, Room, Message, RoomType, Amenity
 from .forms import ProfileForm, RoomForm, UserRegistrationForm, MessageForm
 
 
+@cache_page(60 * 5)  # Cache for 5 minutes
 def home(request):
     """
     Enhanced home page with advanced filtering for rooms and profiles.
@@ -36,7 +38,7 @@ def home(request):
     guests_allowed_filter = request.GET.get('guests_allowed', '')
 
     # Filter Profiles - only show people looking for rooms by default
-    profiles = Profile.objects.filter(is_looking_for_room=True)
+    profiles = Profile.objects.filter(is_looking_for_room=True).select_related('user')
     
     # Exclude current user's profile if logged in
     if request.user.is_authenticated and hasattr(request.user, 'profile'):
@@ -77,7 +79,7 @@ def home(request):
                 profiles = profiles.filter(**{field: True})
 
     # Filter Rooms
-    available_rooms = Room.objects.filter(is_active=True)
+    available_rooms = Room.objects.filter(is_active=True).select_related('user').prefetch_related('images')
     
     # Automatically filter by user's city if logged in and no explicit city filter
     if request.user.is_authenticated and hasattr(request.user, 'profile'):
@@ -502,6 +504,7 @@ def my_listings(request):
     return render(request, 'my_listings.html', {'rooms': user_rooms})
 
 
+@cache_page(60 * 3)  # Cache for 3 minutes
 def advanced_search(request):
     """
     Advanced room search by rent, availability date, and room type.
@@ -513,7 +516,7 @@ def advanced_search(request):
     amenities = request.GET.getlist('amenities')
     city_filter = request.GET.get('city', '')
 
-    rooms = Room.objects.filter(is_active=True)
+    rooms = Room.objects.filter(is_active=True).select_related('user', 'room_type').prefetch_related('images', 'amenities')
 
     # Automatically filter by user's city if logged in and no explicit city filter
     if request.user.is_authenticated and hasattr(request.user, 'profile'):
