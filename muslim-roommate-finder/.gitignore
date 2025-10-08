@@ -59,3 +59,10 @@ staticfiles/
 # Backup files
 *.bak
 *.backup
+
+# Documentation (keep local, don't commit)
+DEVELOPER_CHEAT_SHEET.md
+ARCHITECTURE_OVERVIEW.md
+QUICK_START_GUIDE.md
+STUDY_GUIDE*.md
+PRACTICAL_EXERCISES.md

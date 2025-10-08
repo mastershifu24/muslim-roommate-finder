@@ -37,13 +37,22 @@
   background: linear-gradient(135deg, var(--warm-cream) 0%, #f0f0e6 100%);
 }
 
-/* Modern UI Enhancements */
+/* Modern UI Enhancements - Override style.css */
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, var(--islamic-ivory) 0%, var(--islamic-cream) 50%, var(--islamic-ivory) 100%);
-  background-attachment: fixed;
-  min-height: 100vh;
-  position: relative;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  background: linear-gradient(135deg, var(--islamic-ivory) 0%, var(--islamic-cream) 50%, var(--islamic-ivory) 100%) !important;
+  background-attachment: fixed !important;
+  min-height: 100vh !important;
+  position: relative !important;
+  padding: 0 !important; /* Override style.css padding */
+}
+
+/* Override container background from style.css */
+body.container {
+  background: transparent !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  max-width: none !important;
 }
 
 /* Islamic Pattern Background */
@@ -55,10 +64,25 @@ body::before {
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle at 25% 25%, rgba(46, 125, 50, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(0, 105, 92, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.02) 0%, transparent 50%);
-  background-size: 400px 400px, 600px 600px, 800px 800px;
+    radial-gradient(circle at 25% 25%, rgba(46, 125, 50, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(0, 105, 92, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
+    /* Geometric Islamic pattern */
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 2px,
+      rgba(46, 125, 50, 0.03) 2px,
+      rgba(46, 125, 50, 0.03) 4px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 105, 92, 0.03) 2px,
+      rgba(0, 105, 92, 0.03) 4px
+    );
+  background-size: 300px 300px, 500px 500px, 700px 700px, 40px 40px, 40px 40px;
   pointer-events: none;
   z-index: -1;
 }
