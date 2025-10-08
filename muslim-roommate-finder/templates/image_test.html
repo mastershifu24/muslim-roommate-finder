@@ -13,6 +13,8 @@
         <ul>
             <li>DEBUG: {{ debug }}</li>
             <li>MEDIA_URL: {{ media_url }}</li>
+            <li>User: {{ user.username|default:"Not logged in" }}</li>
+            <li>Authenticated: {{ is_authenticated }}</li>
             <li>Total Rooms: {{ rooms_count }}</li>
             <li>Total Room Images: {{ images_count }}</li>
             <li>Total Profiles: {{ profiles_count }}</li>

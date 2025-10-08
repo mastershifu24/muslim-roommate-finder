@@ -12,7 +12,6 @@ from .models import Profile, Room, Message, RoomType, Amenity
 from .forms import ProfileForm, RoomForm, UserRegistrationForm, MessageForm
 
 
-@cache_page(60 * 5)  # Cache for 5 minutes
 def home(request):
     """
     Enhanced home page with advanced filtering for rooms and profiles.
@@ -504,7 +503,6 @@ def my_listings(request):
     return render(request, 'my_listings.html', {'rooms': user_rooms})
 
 
-@cache_page(60 * 3)  # Cache for 3 minutes
 def advanced_search(request):
     """
     Advanced room search by rent, availability date, and room type.
@@ -1119,6 +1117,8 @@ def image_test(request):
         'profiles_with_photos': Profile.objects.exclude(profile_photo='').count(),
         'rooms': rooms,
         'profiles': profiles,
+        'user': request.user,
+        'is_authenticated': request.user.is_authenticated,
     }
     return render(request, 'image_test.html', context)
 
