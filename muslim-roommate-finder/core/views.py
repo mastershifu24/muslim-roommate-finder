@@ -1138,6 +1138,25 @@ def image_test(request):
     }
     return render(request, 'image_test.html', context)
 
+def debug_images(request):
+    """Debug view to test image display without CSS interference"""
+    available_rooms = Room.objects.filter(is_active=True).prefetch_related('images')
+    profiles = Profile.objects.filter(is_looking_for_room=True)
+    
+    # Apply gender filtering if logged in
+    if request.user.is_authenticated and hasattr(request.user, 'profile'):
+        user_gender = request.user.profile.gender
+        if user_gender:
+            available_rooms = available_rooms.filter(user__gender=user_gender)
+            profiles = profiles.filter(gender=user_gender)
+    
+    context = {
+        'available_rooms': available_rooms,
+        'profiles': profiles,
+        'user': request.user,
+    }
+    return render(request, 'debug_images.html', context)
+
 
 @login_required
 def toggle_favorite(request):

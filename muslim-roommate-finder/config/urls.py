@@ -45,6 +45,7 @@ urlpatterns = [
     # Debug endpoints
     path('create-test-account/', views.create_test_account, name='create_test_account'),
     path('image-test/', views.image_test, name='image_test'),
+    path('debug-images/', views.debug_images, name='debug_images'),
     
     # Favorites
     path('toggle-favorite/', views.toggle_favorite, name='toggle_favorite'),

@@ -18,10 +18,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
   <!-- Custom CSS -->
-  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <!-- <link href="{% static 'css/style.css' %}" rel="stylesheet"> -->
   <link href="{% static 'css/enhanced.css' %}" rel="stylesheet">
 </head>
-<body class="container py-4">
+<body class="py-4">
 
   <!-- Header -->
   <header class="mb-4">
@@ -81,7 +81,9 @@
   {% include "partials/messages.html" %}
 
   <!-- Page content -->
-  {% block content %}{% endblock %}
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
 
   <!-- Footer -->
   <footer class="text-center py-4">

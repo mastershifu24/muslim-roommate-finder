@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Images</title>
+</head>
+<body>
+    <h1>Image Debug Test</h1>
+    
+    <h2>Room Images</h2>
+    {% for room in available_rooms %}
+        <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+            <h3>{{ room.title }}</h3>
+            <p>Primary Image: {{ room.primary_image }}</p>
+            <p>All Images Count: {{ room.images.count }}</p>
+            
+            {% if room.primary_image %}
+                <img src="{{ room.primary_image.image.url }}" style="max-width: 200px; height: auto; border: 2px solid red;" alt="Room image">
+                <p>URL: {{ room.primary_image.image.url }}</p>
+            {% else %}
+                <p style="color: red;">NO PRIMARY IMAGE</p>
+            {% endif %}
+            
+            <h4>All Images:</h4>
+            {% for image in room.images.all %}
+                <img src="{{ image.image.url }}" style="max-width: 150px; height: auto; margin: 5px; border: 1px solid blue;" alt="Room image">
+                <p>URL: {{ image.image.url }} (Primary: {{ image.is_primary }})</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    
+    <h2>Profile Images</h2>
+    {% for profile in profiles %}
+        <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+            <h3>{{ profile.name }}</h3>
+            {% if profile.profile_photo %}
+                <img src="{{ profile.profile_photo.url }}" style="max-width: 100px; height: auto; border: 2px solid green;" alt="Profile photo">
+                <p>URL: {{ profile.profile_photo.url }}</p>
+            {% else %}
+                <p style="color: red;">NO PROFILE PHOTO</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+</body>
+</html>

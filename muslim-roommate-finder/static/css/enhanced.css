@@ -55,8 +55,8 @@ body.container {
   max-width: none !important;
 }
 
-/* Ensure all images are visible */
-img {
+/* Ensure all images are visible - but be more specific */
+.room-image, .profile-avatar, img[src*="media"] {
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
