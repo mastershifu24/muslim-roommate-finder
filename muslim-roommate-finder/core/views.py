@@ -42,10 +42,10 @@ def home(request):
     # Exclude current user's profile if logged in
     if request.user.is_authenticated and hasattr(request.user, 'profile'):
         profiles = profiles.exclude(id=request.user.profile.id)
-        
-        # Filter by same gender for appropriate roommate matching
+        # Gender-based filtering: show only same gender
         user_gender = request.user.profile.gender
-        profiles = profiles.filter(gender=user_gender)
+        if user_gender:
+            profiles = profiles.filter(gender=user_gender)
 
     if search_query:
         profiles = profiles.filter(
@@ -83,9 +83,15 @@ def home(request):
     # Automatically filter by user's city if logged in and no explicit city filter
     if request.user.is_authenticated and hasattr(request.user, 'profile'):
         user_city = request.user.profile.city
+        user_gender = request.user.profile.gender
+        
         # If user has a city and hasn't explicitly filtered by another city, show their city
         if user_city and not city_filter:
             available_rooms = available_rooms.filter(city__icontains=user_city)
+        
+        # Gender-based filtering: show only rooms from same gender
+        if user_gender:
+            available_rooms = available_rooms.filter(user__gender=user_gender)
     
     if search_query:
         available_rooms = available_rooms.filter(
@@ -149,6 +155,10 @@ def browse_profiles(request):
     # Exclude current user's profile if logged in
     if request.user.is_authenticated and hasattr(request.user, 'profile'):
         profiles = profiles.exclude(id=request.user.profile.id)
+        # Gender-based filtering: show only same gender
+        user_gender = request.user.profile.gender
+        if user_gender and not gender_filter:  # Only auto-filter if no explicit gender filter
+            profiles = profiles.filter(gender=user_gender)
     
     # Apply filters
     if search_query:
@@ -519,9 +529,15 @@ def advanced_search(request):
     # Automatically filter by user's city if logged in and no explicit city filter
     if request.user.is_authenticated and hasattr(request.user, 'profile'):
         user_city = request.user.profile.city
+        user_gender = request.user.profile.gender
+        
         # If user has a city and hasn't explicitly filtered by another city, show their city
         if user_city and not city_filter:
             rooms = rooms.filter(city__icontains=user_city)
+        
+        # Gender-based filtering: show only rooms from same gender
+        if user_gender:
+            rooms = rooms.filter(user__gender=user_gender)
     
     # Apply explicit city filter if provided
     if city_filter:
