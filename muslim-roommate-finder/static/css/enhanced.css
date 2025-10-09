@@ -91,6 +91,27 @@ img[src*="media"] {
   opacity: 1 !important;
 }
 
+/* Smooth chevron rotation for collapse buttons */
+.fa-chevron-down {
+  transition: transform 0.3s ease;
+}
+
+/* Ensure collapse functionality works */
+.collapse {
+  transition: height 0.35s ease;
+}
+
+/* Fix for advanced filters button */
+[data-bs-toggle="collapse"] {
+  cursor: pointer;
+  user-select: none;
+}
+
+[data-bs-toggle="collapse"]:hover {
+  background-color: rgba(0, 105, 92, 0.05);
+  border-radius: 0.5rem;
+}
+
 /* Islamic Pattern Background */
 body::before {
   content: '';
