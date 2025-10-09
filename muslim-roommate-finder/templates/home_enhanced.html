@@ -326,7 +326,7 @@
             <div class="position-relative">
               {% if room.primary_image %}
                 <img src="{{ room.primary_image.image.url }}" class="room-image" 
-                     alt="Room image">
+                     alt="Room image" style="display: block !important; visibility: visible !important; opacity: 1 !important; width: 100% !important; height: 200px !important; object-fit: cover !important;">
               {% else %}
                 <div class="bg-gradient-success d-flex align-items-center justify-content-center text-white" 
                      style="height: 200px;">
@@ -410,7 +410,7 @@
               {% if profile.profile_photo %}
                 <img src="{{ profile.profile_photo.url }}" 
                      class="profile-avatar mb-3" 
-                     alt="Profile photo">
+                     alt="Profile photo" style="display: block !important; visibility: visible !important; opacity: 1 !important; width: 80px !important; height: 80px !important; object-fit: cover !important;">
               {% else %}
                 <div class="bg-gradient-primary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center text-white shadow" 
                      style="width: 80px; height: 80px;">

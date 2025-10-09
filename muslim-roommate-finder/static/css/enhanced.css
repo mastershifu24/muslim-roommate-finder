@@ -56,7 +56,36 @@ body.container {
 }
 
 /* Ensure all images are visible - but be more specific */
-.room-image, .profile-avatar, img[src*="media"] {
+.room-image, .profile-avatar, img[src*="media"], img[src*="/media/"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: 100% !important;
+}
+
+/* Specific overrides for homepage images */
+.profile-card .room-image, .profile-card img[src*="media"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  height: 200px !important;
+  object-fit: cover !important;
+}
+
+/* Nuclear option - force all media images to show */
+img[src*="media"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+/* Override any Bootstrap or other framework hiding */
+.container img[src*="media"], .row img[src*="media"], .col img[src*="media"] {
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
