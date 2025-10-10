@@ -8,6 +8,9 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.views.decorators.cache import cache_page
+from django.core.mail import send_mail
+from django.conf import settings
+from django.template.loader import render_to_string
 from .models import Profile, Room, Message, RoomType, Amenity, Feedback
 from .forms import ProfileForm, RoomForm, UserRegistrationForm, MessageForm, FeedbackForm
 
@@ -1226,6 +1229,13 @@ def feedback_view(request):
             feedback.browser_info = browser_info
             feedback.save()
             
+            # Send email notification
+            try:
+                send_feedback_email(feedback)
+            except Exception as e:
+                # Don't fail the feedback submission if email fails
+                print(f"Email notification failed: {e}")
+            
             messages.success(request, 'Thank you for your feedback! We appreciate you helping us improve the app.')
             return redirect('feedback_success')
     else:
@@ -1236,6 +1246,102 @@ def feedback_view(request):
         'user': request.user,
     }
     return render(request, 'feedback.html', context)
+
+
+def send_feedback_email(feedback):
+    """Send email notification for new feedback"""
+    # Your email address - replace with your actual email
+    admin_email = getattr(settings, 'ADMIN_EMAIL', 'ahmedshifa298@gmail.com')
+    
+    subject = f"🕌 New Feedback: {feedback.get_feedback_type_display()} - {feedback.title}"
+    
+    # Create email content
+    context = {
+        'feedback': feedback,
+        'site_url': request.build_absolute_uri('/') if 'request' in globals() else 'http://127.0.0.1:8000',
+    }
+    
+    # HTML email template
+    html_message = f"""
+    <html>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h2 style="color: #2d5016; border-bottom: 2px solid #4a7c59; padding-bottom: 10px;">
+                🕌 New Feedback from Muslim Roommate Finder
+            </h2>
+            
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                <h3 style="color: #2d5016; margin-top: 0;">Feedback Details</h3>
+                <p><strong>Type:</strong> {feedback.get_feedback_type_display()}</p>
+                <p><strong>Priority:</strong> <span style="background: {'#d4edda' if feedback.priority == 'low' else '#fff3cd' if feedback.priority == 'medium' else '#f8d7da' if feedback.priority == 'high' else '#f5c6cb'}; padding: 2px 8px; border-radius: 3px;">{feedback.get_priority_display()}</span></p>
+                <p><strong>Title:</strong> {feedback.title}</p>
+                <p><strong>From:</strong> {feedback.name}</p>
+                {f'<p><strong>Email:</strong> <a href="mailto:{feedback.email}">{feedback.email}</a></p>' if feedback.email else ''}
+                <p><strong>Date:</strong> {feedback.created_at.strftime('%B %d, %Y at %I:%M %p')}</p>
+                {f'<p><strong>Page URL:</strong> <a href="{feedback.page_url}" target="_blank">{feedback.page_url}</a></p>' if feedback.page_url else ''}
+            </div>
+            
+            <div style="background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                <h3 style="color: #2d5016; margin-top: 0;">Message</h3>
+                <div style="white-space: pre-wrap;">{feedback.message}</div>
+            </div>
+            
+            <div style="background: #e9ecef; padding: 15px; border-radius: 5px; margin: 20px 0; font-size: 12px; color: #666;">
+                <p><strong>Technical Info:</strong></p>
+                <p><strong>Browser:</strong> {feedback.browser_info}</p>
+                <p><strong>User:</strong> {feedback.user.username if feedback.user else 'Anonymous'}</p>
+                <p><strong>Feedback ID:</strong> {feedback.id}</p>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{context['site_url']}admin/core/feedback/{feedback.id}/change/" 
+                   style="background: #2d5016; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                    📝 View & Respond in Admin
+                </a>
+            </div>
+            
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+            <p style="font-size: 12px; color: #666; text-align: center;">
+                This email was sent from the Muslim Roommate Finder feedback system.<br>
+                You can manage your notification preferences in the admin panel.
+            </p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    # Plain text version
+    text_message = f"""
+New Feedback from Muslim Roommate Finder
+
+Type: {feedback.get_feedback_type_display()}
+Priority: {feedback.get_priority_display()}
+Title: {feedback.title}
+From: {feedback.name}
+{f'Email: {feedback.email}' if feedback.email else ''}
+Date: {feedback.created_at.strftime('%B %d, %Y at %I:%M %p')}
+{f'Page URL: {feedback.page_url}' if feedback.page_url else ''}
+
+Message:
+{feedback.message}
+
+Technical Info:
+Browser: {feedback.browser_info}
+User: {feedback.user.username if feedback.user else 'Anonymous'}
+Feedback ID: {feedback.id}
+
+View in Admin: {context['site_url']}admin/core/feedback/{feedback.id}/change/
+    """
+    
+    # Send email
+    send_mail(
+        subject=subject,
+        message=text_message,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[admin_email],
+        html_message=html_message,
+        fail_silently=False,
+    )
 
 
 def feedback_success(request):

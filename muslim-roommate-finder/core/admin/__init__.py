@@ -1,7 +1,7 @@
 from django.contrib import admin
 from core.models import (
     Profile, RoommateProfile, Contact, Message, Room, RoomType, 
-    Amenity, RoomImage, RoomReview, RoomFavorite, RoomVerification, Favorite
+    Amenity, RoomImage, RoomReview, RoomFavorite, RoomVerification, Favorite, Feedback
 )
 
 # Import admin classes
@@ -9,6 +9,7 @@ from .profile_admin import ProfileAdmin
 from .room_admin import RoomAdmin, RoomTypeAdmin, AmenityAdmin, RoomImageAdmin
 from .messaging_admin import MessageAdmin
 from .reviews_admin import RoomReviewAdmin
+from .feedback_admin import FeedbackAdmin
 
 # Register additional models that don't have custom admin classes
 @admin.register(RoommateProfile)

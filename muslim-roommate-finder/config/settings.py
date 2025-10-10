@@ -209,3 +209,20 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+# EMAIL CONFIGURATION
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Change this to your email provider
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'ahmedshifa298@gmail.com')  # Your email
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'your-app-password')  # Your app password
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'ahmedshifa298@gmail.com')
+
+# Admin email for feedback notifications
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'ahmedshifa298@gmail.com')
+
+# For development/testing, you can use console backend
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    print("📧 Email notifications will be printed to console in development mode")
+    print(f"📧 To receive real emails, set EMAIL_HOST_USER and EMAIL_HOST_PASSWORD environment variables")
