@@ -223,6 +223,12 @@ ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'ahmedshifa298@gmail.com')
 
 # For development/testing, you can use console backend
 if DEBUG:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    print("📧 Email notifications will be printed to console in development mode")
-    print(f"📧 To receive real emails, set EMAIL_HOST_USER and EMAIL_HOST_PASSWORD environment variables")
+    # Check if app password is set
+    if os.getenv('EMAIL_HOST_PASSWORD') and os.getenv('EMAIL_HOST_PASSWORD') != 'your-app-password':
+        # Use real SMTP if app password is provided
+        EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+        print("📧 Real email notifications enabled - emails will be sent to your inbox!")
+    else:
+        EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+        print("📧 Email notifications will be printed to console in development mode")
+        print(f"📧 To receive real emails, set EMAIL_HOST_USER and EMAIL_HOST_PASSWORD environment variables")
