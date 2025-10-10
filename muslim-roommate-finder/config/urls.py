@@ -55,6 +55,9 @@ urlpatterns = [
     # User Guide
     path('user-guide/', views.user_guide_view, name='user_guide'),
     
+    # Debug endpoints
+    path('debug-feedback/', views.debug_feedback_view, name='debug_feedback'),
+    
     # Favorites
     path('toggle-favorite/', views.toggle_favorite, name='toggle_favorite'),
 ]

@@ -1377,3 +1377,46 @@ def user_guide_view(request):
         'user': request.user,
     }
     return render(request, 'user_guide.html', context)
+
+
+def debug_feedback_view(request):
+    """Debug view to check feedback submissions and email settings"""
+    from django.conf import settings
+    from django.core.mail import send_mail
+    
+    # Handle test email
+    if request.method == 'POST' and 'test_email' in request.POST:
+        try:
+            admin_email = getattr(settings, 'ADMIN_EMAIL', 'ahmedshifa298@gmail.com')
+            
+            send_mail(
+                subject='🧪 Test Email from Muslim Roommate Finder',
+                message='This is a test email to verify email configuration is working properly.',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[admin_email],
+                fail_silently=False,
+            )
+            messages.success(request, f'Test email sent successfully to {admin_email}!')
+        except Exception as e:
+            messages.error(request, f'Failed to send test email: {str(e)}')
+    
+    feedback_count = Feedback.objects.count()
+    latest_feedback = Feedback.objects.last() if feedback_count > 0 else None
+    
+    # Test email settings
+    email_info = {
+        'backend': settings.EMAIL_BACKEND,
+        'host': getattr(settings, 'EMAIL_HOST', 'Not set'),
+        'user': getattr(settings, 'EMAIL_HOST_USER', 'Not set'),
+        'admin_email': getattr(settings, 'ADMIN_EMAIL', 'Not set'),
+        'debug_mode': settings.DEBUG,
+    }
+    
+    context = {
+        'feedback_count': feedback_count,
+        'latest_feedback': latest_feedback,
+        'email_info': email_info,
+        'all_feedback': Feedback.objects.all().order_by('-created_at')[:10],
+    }
+    
+    return render(request, 'debug_feedback.html', context)

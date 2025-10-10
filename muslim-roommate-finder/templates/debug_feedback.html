@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Debug Feedback - Muslim Roommate Finder{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary mb-3">
+            <i class="fas fa-bug me-3"></i>Debug Feedback System
+        </h1>
+        <p class="lead text-muted">Check feedback submissions and email configuration</p>
+    </div>
+
+    <!-- Feedback Count -->
+    <div class="card border-0 shadow-lg mb-4">
+        <div class="card-header bg-primary text-white py-3">
+            <h3 class="mb-0">
+                <i class="fas fa-database me-2"></i>Database Status
+            </h3>
+        </div>
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="text-primary">Total Feedback Submissions</h4>
+                    <div class="display-3 text-success fw-bold">{{ feedback_count }}</div>
+                </div>
+                <div class="col-md-6">
+                    {% if latest_feedback %}
+                    <h4 class="text-primary">Latest Submission</h4>
+                    <div class="border rounded p-3 bg-light">
+                        <strong>{{ latest_feedback.title }}</strong><br>
+                        <small class="text-muted">By: {{ latest_feedback.name }}</small><br>
+                        <small class="text-muted">Date: {{ latest_feedback.created_at }}</small>
+                    </div>
+                    {% else %}
+                    <h4 class="text-warning">No Feedback Found</h4>
+                    <p class="text-muted">No feedback has been submitted yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Configuration -->
+    <div class="card border-0 shadow-lg mb-4">
+        <div class="card-header bg-info text-white py-3">
+            <h3 class="mb-0">
+                <i class="fas fa-envelope me-2"></i>Email Configuration
+            </h3>
+        </div>
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="text-info">Settings</h5>
+                    <ul class="list-unstyled">
+                        <li><strong>Backend:</strong> {{ email_info.backend }}</li>
+                        <li><strong>Host:</strong> {{ email_info.host }}</li>
+                        <li><strong>User:</strong> {{ email_info.user }}</li>
+                        <li><strong>Admin Email:</strong> {{ email_info.admin_email }}</li>
+                        <li><strong>Debug Mode:</strong> 
+                            {% if email_info.debug_mode %}
+                                <span class="badge bg-success">Yes</span>
+                            {% else %}
+                                <span class="badge bg-warning">No</span>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="text-info">Status</h5>
+                    {% if email_info.debug_mode %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Development Mode:</strong> Emails will be printed to console
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <strong>Production Mode:</strong> Emails will be sent to {{ email_info.admin_email }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Feedback -->
+    {% if all_feedback %}
+    <div class="card border-0 shadow-lg mb-4">
+        <div class="card-header bg-success text-white py-3">
+            <h3 class="mb-0">
+                <i class="fas fa-list me-2"></i>Recent Feedback Submissions
+            </h3>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Title</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Priority</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feedback in all_feedback %}
+                        <tr>
+                            <td><strong>{{ feedback.title|truncatechars:40 }}</strong></td>
+                            <td>{{ feedback.name }}</td>
+                            <td><span class="badge bg-info">{{ feedback.get_feedback_type_display }}</span></td>
+                            <td><span class="badge bg-{{ feedback.get_priority_color }}">{{ feedback.get_priority_display }}</span></td>
+                            <td>{{ feedback.created_at|date:"M d, H:i" }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#feedbackModal{{ feedback.id }}">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Test Email Button -->
+    <div class="card border-0 shadow-lg mb-4">
+        <div class="card-header bg-warning text-white py-3">
+            <h3 class="mb-0">
+                <i class="fas fa-paper-plane me-2"></i>Test Email
+            </h3>
+        </div>
+        <div class="card-body p-4 text-center">
+            <p class="mb-3">Send a test email to verify email configuration:</p>
+            <form method="post" action="{% url 'debug_feedback' %}">
+                {% csrf_token %}
+                <button type="submit" name="test_email" class="btn btn-warning btn-lg">
+                    <i class="fas fa-envelope me-2"></i>Send Test Email
+                </button>
+            </form>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mt-3">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="text-center mb-5">
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'feedback' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-comment-dots me-2"></i>Submit Test Feedback
+            </a>
+            <a href="/admin/core/feedback/" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-cog me-2"></i>Django Admin
+            </a>
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg">
+                <i class="fas fa-home me-2"></i>Back to Home
+            </a>
+        </div>
+    </div>
+
+    <!-- Feedback Detail Modals -->
+    {% for feedback in all_feedback %}
+    <div class="modal fade" id="feedbackModal{{ feedback.id }}" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ feedback.title }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>From:</strong> {{ feedback.name }}
+                            {% if feedback.email %}<br><strong>Email:</strong> {{ feedback.email }}{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Type:</strong> {{ feedback.get_feedback_type_display }}<br>
+                            <strong>Priority:</strong> <span class="badge bg-{{ feedback.get_priority_color }}">{{ feedback.get_priority_display }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Message:</strong>
+                        <div class="border rounded p-3 mt-2 bg-light">
+                            {{ feedback.message|linebreaks }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Submitted:</strong> {{ feedback.created_at|date:"M d, Y H:i" }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Browser:</strong> {{ feedback.browser_info|truncatechars:50 }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="/admin/core/feedback/{{ feedback.id }}/change/" class="btn btn-primary">
+                        <i class="fas fa-edit me-1"></i>Edit in Admin
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
