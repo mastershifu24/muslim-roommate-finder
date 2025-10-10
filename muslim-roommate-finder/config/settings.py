@@ -214,12 +214,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Change this to your email provider
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'ahmedshifa298@gmail.com')  # Your email
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'your-app-password')  # Your app password
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'ahmedshifa298@gmail.com')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')  # Set in .env file
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')  # Set in .env file
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', '')  # Set in .env file
 
 # Admin email for feedback notifications
-ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'ahmedshifa298@gmail.com')
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', '')  # Set in .env file
 
 # For development/testing, you can use console backend
 if DEBUG:
