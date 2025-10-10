@@ -1,0 +1,403 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}User Guide - Muslim Roommate Finder{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary mb-3">
+            <i class="fas fa-mosque me-3"></i>Muslim Roommate Finder
+        </h1>
+        <p class="lead text-muted">User Guide & Testing Instructions</p>
+        <p class="text-muted">Welcome to the Muslim Roommate Finder app! This guide will help you get started and make the most of your experience.</p>
+    </div>
+
+    <!-- Quick Start Section -->
+    <div class="card border-0 shadow-lg mb-5">
+        <div class="card-header bg-gradient-primary text-white py-4">
+            <h2 class="mb-0">
+                <i class="fas fa-rocket me-2"></i>Quick Start
+            </h2>
+        </div>
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="text-primary mb-3">
+                        <i class="fas fa-play-circle me-2"></i>Getting Started
+                    </h4>
+                    <ol class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Visit the app at <code>http://127.0.0.1:8000</code></li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Create an account or login with existing credentials</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Complete your profile with preferences</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Start browsing rooms and profiles!</li>
+                    </ol>
+                </div>
+                <div class="col-md-6">
+                    <h4 class="text-primary mb-3">
+                        <i class="fas fa-users me-2"></i>Test Accounts
+                    </h4>
+                    <p class="mb-3">For testing purposes, use these pre-created accounts:</p>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Password</th>
+                                    <th>City</th>
+                                    <th>Gender</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>abdullah_malik</code></td>
+                                    <td><code>password123</code></td>
+                                    <td>Chicago</td>
+                                    <td>Male</td>
+                                </tr>
+                                <tr>
+                                    <td><code>ahmed_hassan</code></td>
+                                    <td><code>password123</code></td>
+                                    <td>New York</td>
+                                    <td>Male</td>
+                                </tr>
+                                <tr>
+                                    <td><code>fatima_ali</code></td>
+                                    <td><code>password123</code></td>
+                                    <td>Los Angeles</td>
+                                    <td>Female</td>
+                                </tr>
+                                <tr>
+                                    <td><code>omar_ibrahim</code></td>
+                                    <td><code>password123</code></td>
+                                    <td>Miami</td>
+                                    <td>Male</td>
+                                </tr>
+                                <tr>
+                                    <td><code>aisha_mohammed</code></td>
+                                    <td><code>password123</code></td>
+                                    <td>Boston</td>
+                                    <td>Female</td>
+                                </tr>
+                                <tr>
+                                    <td><code>yusuf_ahmed</code></td>
+                                    <td><code>password123</code></td>
+                                    <td>Seattle</td>
+                                    <td>Male</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Features Section -->
+    <div class="card border-0 shadow-lg mb-5">
+        <div class="card-header bg-gradient-success text-white py-4">
+            <h2 class="mb-0">
+                <i class="fas fa-home me-2"></i>Core Features
+            </h2>
+        </div>
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="feature-item mb-4">
+                        <h4 class="text-success mb-3">
+                            <i class="fas fa-search me-2"></i>Browse Available Rooms
+                        </h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-image text-info me-2"></i>View room listings with photos and descriptions</li>
+                            <li class="mb-2"><i class="fas fa-filter text-info me-2"></i>Filter by location, price, and Islamic preferences</li>
+                            <li class="mb-2"><i class="fas fa-envelope text-info me-2"></i>Contact room owners through messaging</li>
+                            <li class="mb-2"><i class="fas fa-heart text-info me-2"></i>Save favorites for later review</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-item mb-4">
+                        <h4 class="text-success mb-3">
+                            <i class="fas fa-user-plus me-2"></i>Create Your Profile
+                        </h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-id-card text-info me-2"></i>Personal information and preferences</li>
+                            <li class="mb-2"><i class="fas fa-star text-info me-2"></i>Islamic preferences and lifestyle details</li>
+                            <li class="mb-2"><i class="fas fa-camera text-info me-2"></i>Profile photo for recognition</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="feature-item mb-4">
+                        <h4 class="text-success mb-3">
+                            <i class="fas fa-plus-circle me-2"></i>List Your Room
+                        </h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-info-circle text-info me-2"></i>Room details, type, and pricing</li>
+                            <li class="mb-2"><i class="fas fa-wifi text-info me-2"></i>Amenities and what's included</li>
+                            <li class="mb-2"><i class="fas fa-hands text-info me-2"></i>Islamic considerations and policies</li>
+                            <li class="mb-2"><i class="fas fa-images text-info me-2"></i>Multiple photos to showcase space</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-item mb-4">
+                        <h4 class="text-success mb-3">
+                            <i class="fas fa-search-plus me-2"></i>Advanced Search
+                        </h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-map-marker-alt text-info me-2"></i>Location-based search with city filtering</li>
+                            <li class="mb-2"><i class="fas fa-dollar-sign text-info me-2"></i>Price range filtering</li>
+                            <li class="mb-2"><i class="fas fa-venus-mars text-info me-2"></i>Gender-based filtering (automatic)</li>
+                            <li class="mb-2"><i class="fas fa-calendar text-info me-2"></i>Age range and Islamic preferences</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How to Use Section -->
+    <div class="card border-0 shadow-lg mb-5">
+        <div class="card-header bg-gradient-info text-white py-4">
+            <h2 class="mb-0">
+                <i class="fas fa-compass me-2"></i>How to Use the App
+            </h2>
+        </div>
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="text-info mb-3">
+                        <i class="fas fa-user-search me-2"></i>For Room Seekers
+                    </h4>
+                    <div class="step mb-3">
+                        <strong class="text-primary">1. Complete Your Profile</strong>
+                        <p class="small text-muted mb-2">Go to Dashboard → Edit Profile. Fill in personal info, Islamic preferences, and upload a photo.</p>
+                    </div>
+                    <div class="step mb-3">
+                        <strong class="text-primary">2. Search for Rooms</strong>
+                        <p class="small text-muted mb-2">Use homepage search bar or click "Advanced Filters" for detailed options.</p>
+                    </div>
+                    <div class="step mb-3">
+                        <strong class="text-primary">3. Contact Room Owners</strong>
+                        <p class="small text-muted mb-2">Click "Contact" on listings to send messages and introduce yourself.</p>
+                    </div>
+                    <div class="step mb-3">
+                        <strong class="text-primary">4. Manage Your Search</strong>
+                        <p class="small text-muted mb-2">Save favorites, check inbox, and update profile as needed.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <h4 class="text-info mb-3">
+                        <i class="fas fa-home me-2"></i>For Room Owners
+                    </h4>
+                    <div class="step mb-3">
+                        <strong class="text-primary">1. List Your Room</strong>
+                        <p class="small text-muted mb-2">Go to Dashboard → "List a Room". Fill in details, pricing, and upload photos.</p>
+                    </div>
+                    <div class="step mb-3">
+                        <strong class="text-primary">2. Manage Your Listings</strong>
+                        <p class="small text-muted mb-2">View all listings in "My Listings", edit details, and respond to inquiries.</p>
+                    </div>
+                    <div class="step mb-3">
+                        <strong class="text-primary">3. Communicate</strong>
+                        <p class="small text-muted mb-2">Check inbox for messages, respond promptly, and ask lifestyle questions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Islamic Features Section -->
+    <div class="card border-0 shadow-lg mb-5">
+        <div class="card-header bg-gradient-warning text-white py-4">
+            <h2 class="mb-0">
+                <i class="fas fa-star-and-crescent me-2"></i>Islamic Features
+            </h2>
+        </div>
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4 class="text-warning mb-3">
+                        <i class="fas fa-leaf me-2"></i>Halal-Friendly Filtering
+                    </h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Zabihah-only:</strong> Filter for users who only eat halal meat</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Prayer-friendly:</strong> Find roommates who respect prayer times</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Guest policies:</strong> Set preferences for visitors in shared spaces</li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-4">
+                    <h4 class="text-warning mb-3">
+                        <i class="fas fa-venus-mars me-2"></i>Gender-Based Filtering
+                    </h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Automatic filtering:</strong> Men only see male roommates/rooms</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Privacy protection:</strong> Ensures Islamic guidelines are followed</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Separate listings:</strong> Room listings are gender-separated</li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-4">
+                    <h4 class="text-warning mb-3">
+                        <i class="fas fa-heart me-2"></i>Cultural Considerations
+                    </h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Shared values:</strong> Connect with fellow Muslims</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Lifestyle compatibility:</strong> Find roommates with similar practices</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Respectful environment:</strong> Built-in Islamic principles</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testing Features Section -->
+    <div class="card border-0 shadow-lg mb-5">
+        <div class="card-header bg-gradient-danger text-white py-4">
+            <h2 class="mb-0">
+                <i class="fas fa-bug me-2"></i>Testing Features
+            </h2>
+        </div>
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="text-danger mb-3">
+                        <i class="fas fa-tasks me-2"></i>What to Test
+                    </h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-user-plus text-primary me-2"></i>User Registration & Login</li>
+                        <li class="mb-2"><i class="fas fa-home text-primary me-2"></i>Room Listings (create, edit, manage)</li>
+                        <li class="mb-2"><i class="fas fa-search text-primary me-2"></i>Search & Filtering (advanced filters)</li>
+                        <li class="mb-2"><i class="fas fa-envelope text-primary me-2"></i>Messaging System</li>
+                        <li class="mb-2"><i class="fas fa-mobile-alt text-primary me-2"></i>User Interface (responsive design)</li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-6">
+                    <h4 class="text-danger mb-3">
+                        <i class="fas fa-database me-2"></i>Known Test Data
+                    </h4>
+                    <div class="mb-3">
+                        <strong class="text-primary">Rooms Available:</strong>
+                        <ul class="small mt-2">
+                            <li>Modern Room in Miami (Brothers Only)</li>
+                            <li>Spacious Room in Boston (Sisters Only)</li>
+                            <li>Modern Room in Downtown Chicago</li>
+                            <li>Cozy Room in Brooklyn (Sisters Only)</li>
+                            <li>Tech Professional Room in Seattle</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Section -->
+    <div class="card border-0 shadow-lg mb-5">
+        <div class="card-header bg-gradient-secondary text-white py-4">
+            <h2 class="mb-0">
+                <i class="fas fa-comment-dots me-2"></i>Give Feedback
+            </h2>
+        </div>
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="text-secondary mb-3">
+                        <i class="fas fa-bug me-2"></i>Bug Reports
+                    </h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-exclamation-triangle text-warning me-2"></i>Something not working as expected</li>
+                        <li class="mb-2"><i class="fas fa-exclamation-triangle text-warning me-2"></i>Error messages you encounter</li>
+                        <li class="mb-2"><i class="fas fa-exclamation-triangle text-warning me-2"></i>Features that don't behave correctly</li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-6">
+                    <h4 class="text-secondary mb-3">
+                        <i class="fas fa-lightbulb me-2"></i>Feature Requests
+                    </h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-plus text-info me-2"></i>New functionality you'd like to see</li>
+                        <li class="mb-2"><i class="fas fa-plus text-info me-2"></i>Improvements to existing features</li>
+                        <li class="mb-2"><i class="fas fa-plus text-info me-2"></i>Additional Islamic features</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="{% url 'feedback' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-paper-plane me-2"></i>Submit Feedback Now
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="card border-0 bg-light mb-4">
+        <div class="card-body p-4">
+            <h4 class="text-primary mb-3">
+                <i class="fas fa-question-circle me-2"></i>Common Issues & Solutions
+            </h4>
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 class="text-info">Images not loading?</h5>
+                    <ul class="small">
+                        <li>Try refreshing the page (Ctrl+F5)</li>
+                        <li>Check your internet connection</li>
+                        <li>Try a different browser</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="text-info">Can't login?</h5>
+                    <ul class="small">
+                        <li>Verify username and password</li>
+                        <li>Try the test accounts listed above</li>
+                        <li>Clear browser cache and cookies</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="text-info">Advanced filters not working?</h5>
+                    <ul class="small">
+                        <li>Make sure JavaScript is enabled</li>
+                        <li>Try clicking the filter button multiple times</li>
+                        <li>Refresh the page if needed</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="text-center mb-5">
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'home' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-home me-2"></i>Back to Home
+            </a>
+            <a href="{% url 'feedback' %}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-comment-dots me-2"></i>Give Feedback
+            </a>
+            {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-success btn-lg">
+                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            </a>
+            {% else %}
+            <a href="{% url 'login' %}" class="btn btn-outline-success btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i>Login
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Thank You Message -->
+    <div class="alert alert-success text-center">
+        <h5 class="mb-3">
+            <i class="fas fa-heart me-2"></i>Thank You for Testing!
+        </h5>
+        <p class="mb-0">Your feedback is invaluable in making this app better for the Muslim community. We appreciate you taking the time to test the features and provide your thoughts.</p>
+        <p class="mt-2 mb-0"><strong>Happy roommate hunting!</strong> 🏠✨</p>
+    </div>
+</div>
+{% endblock %}

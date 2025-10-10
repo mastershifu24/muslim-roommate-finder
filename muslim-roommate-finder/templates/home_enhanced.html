@@ -36,6 +36,26 @@
   </div>
 </div>
 
+<!-- New User Help -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="alert alert-info border-0 shadow-sm text-center">
+      <div class="d-flex justify-content-center align-items-center flex-wrap gap-3">
+        <div>
+          <i class="fas fa-info-circle me-2"></i>
+          <strong>New to the app?</strong> Check out our user guide for test accounts and instructions!
+        </div>
+        <a href="{% url 'user_guide' %}" class="btn btn-outline-primary btn-sm">
+          <i class="fas fa-book me-1"></i>View Guide
+        </a>
+        <a href="{% url 'feedback' %}" class="btn btn-outline-success btn-sm">
+          <i class="fas fa-comment-dots me-1"></i>Give Feedback
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Stats Cards -->
 <div class="row mb-5">
   <div class="col-md-4 mb-3">

@@ -8,8 +8,8 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.views.decorators.cache import cache_page
-from .models import Profile, Room, Message, RoomType, Amenity
-from .forms import ProfileForm, RoomForm, UserRegistrationForm, MessageForm
+from .models import Profile, Room, Message, RoomType, Amenity, Feedback
+from .forms import ProfileForm, RoomForm, UserRegistrationForm, MessageForm, FeedbackForm
 
 
 def home(request):
@@ -1209,3 +1209,65 @@ def toggle_favorite(request):
             'success': False,
             'error': str(e)
         })
+
+
+def feedback_view(request):
+    """View for collecting user feedback"""
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            # Get browser info
+            user_agent = request.META.get('HTTP_USER_AGENT', '')
+            browser_info = f"{user_agent[:200]}" if user_agent else "Unknown browser"
+            
+            # Create feedback instance
+            feedback = form.save(commit=False)
+            feedback.user = request.user if request.user.is_authenticated else None
+            feedback.browser_info = browser_info
+            feedback.save()
+            
+            messages.success(request, 'Thank you for your feedback! We appreciate you helping us improve the app.')
+            return redirect('feedback_success')
+    else:
+        form = FeedbackForm()
+    
+    context = {
+        'form': form,
+        'user': request.user,
+    }
+    return render(request, 'feedback.html', context)
+
+
+def feedback_success(request):
+    """Success page after feedback submission"""
+    return render(request, 'feedback_success.html')
+
+
+@login_required
+def feedback_list(request):
+    """Admin view to see all feedback (for testing purposes)"""
+    if not request.user.is_staff:
+        messages.error(request, 'Access denied. Admin access required.')
+        return redirect('home')
+    
+    feedback_list = Feedback.objects.all().order_by('-created_at')
+    
+    # Add pagination
+    paginator = Paginator(feedback_list, 10)
+    page_number = request.GET.get('page')
+    feedback_page = paginator.get_page(page_number)
+    
+    context = {
+        'feedback_list': feedback_page,
+        'total_feedback': feedback_list.count(),
+        'unresolved_count': feedback_list.filter(is_resolved=False).count(),
+    }
+    return render(request, 'admin/feedback_list.html', context)
+
+
+def user_guide_view(request):
+    """View for displaying the user guide within the app"""
+    context = {
+        'user': request.user,
+    }
+    return render(request, 'user_guide.html', context)

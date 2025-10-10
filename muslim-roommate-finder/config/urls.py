@@ -47,6 +47,14 @@ urlpatterns = [
     path('image-test/', views.image_test, name='image_test'),
     path('debug-images/', views.debug_images, name='debug_images'),
     
+    # Feedback endpoints
+    path('feedback/', views.feedback_view, name='feedback'),
+    path('feedback/success/', views.feedback_success, name='feedback_success'),
+    path('admin/feedback/', views.feedback_list, name='feedback_list'),
+    
+    # User Guide
+    path('user-guide/', views.user_guide_view, name='user_guide'),
+    
     # Favorites
     path('toggle-favorite/', views.toggle_favorite, name='toggle_favorite'),
 ]

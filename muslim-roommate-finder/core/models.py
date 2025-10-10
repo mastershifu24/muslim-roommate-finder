@@ -458,6 +458,57 @@ class Favorite(models.Model):
             return f"{self.user.username} ❤️ {self.profile.name}"
         return f"{self.user.username} ❤️ Favorite"
 
+# --- Feedback Model ---
+class Feedback(models.Model):
+    """Model to store user feedback for testing and improvements"""
+    
+    FEEDBACK_TYPES = [
+        ('bug', 'Bug Report'),
+        ('feature', 'Feature Request'),
+        ('ui_ux', 'UI/UX Feedback'),
+        ('general', 'General Feedback'),
+        ('praise', 'Praise/Positive'),
+    ]
+    
+    PRIORITY_LEVELS = [
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('high', 'High'),
+        ('urgent', 'Urgent'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, help_text="User who submitted feedback (optional)")
+    name = models.CharField(max_length=100, help_text="Name of the person giving feedback")
+    email = models.EmailField(null=True, blank=True, help_text="Email for follow-up (optional)")
+    feedback_type = models.CharField(max_length=20, choices=FEEDBACK_TYPES, default='general', help_text="Type of feedback")
+    priority = models.CharField(max_length=10, choices=PRIORITY_LEVELS, default='medium', help_text="Priority level")
+    title = models.CharField(max_length=200, help_text="Brief title of the feedback")
+    message = models.TextField(help_text="Detailed feedback message")
+    page_url = models.URLField(null=True, blank=True, help_text="URL of the page where issue occurred")
+    browser_info = models.CharField(max_length=200, null=True, blank=True, help_text="Browser and device information")
+    is_resolved = models.BooleanField(default=False, help_text="Whether this feedback has been addressed")
+    admin_notes = models.TextField(null=True, blank=True, help_text="Admin notes for tracking resolution")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "User Feedback"
+        verbose_name_plural = "User Feedback"
+    
+    def __str__(self):
+        return f"{self.feedback_type.title()}: {self.title} ({self.name})"
+    
+    def get_priority_color(self):
+        """Return Bootstrap color class based on priority"""
+        colors = {
+            'low': 'success',
+            'medium': 'info', 
+            'high': 'warning',
+            'urgent': 'danger'
+        }
+        return colors.get(self.priority, 'secondary')
+
 # --- Signals ---
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

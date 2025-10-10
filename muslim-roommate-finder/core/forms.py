@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile, Contact, Room, RoomImage, RoomType, Amenity, Message, US_MAJOR_CITIES
+from .models import Profile, Contact, Room, RoomImage, RoomType, Amenity, Message, Feedback, US_MAJOR_CITIES
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -230,3 +230,81 @@ class MessageForm(forms.ModelForm):
         labels = {
             'content': '',
         }
+
+class FeedbackForm(forms.ModelForm):
+    """Form for collecting user feedback during testing"""
+    
+    class Meta:
+        model = Feedback
+        fields = ['name', 'email', 'feedback_type', 'priority', 'title', 'message', 'page_url']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Your name (required)',
+                'required': True
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'your.email@example.com (optional)',
+            }),
+            'feedback_type': forms.Select(attrs={
+                'class': 'form-select',
+                'required': True
+            }),
+            'priority': forms.Select(attrs={
+                'class': 'form-select',
+                'required': True
+            }),
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Brief title of your feedback (required)',
+                'required': True,
+                'maxlength': 200
+            }),
+            'message': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 6,
+                'placeholder': 'Please provide detailed feedback... (required)',
+                'required': True,
+                'minlength': 20
+            }),
+            'page_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://example.com/page (if applicable)',
+            }),
+        }
+        labels = {
+            'name': 'Your Name',
+            'email': 'Email (Optional)',
+            'feedback_type': 'Feedback Type',
+            'priority': 'Priority Level',
+            'title': 'Title',
+            'message': 'Detailed Message',
+            'page_url': 'Page URL (if applicable)',
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Add help text
+        self.fields['name'].help_text = 'This helps us identify who provided the feedback.'
+        self.fields['email'].help_text = 'Optional - only if you want us to follow up with you.'
+        self.fields['feedback_type'].help_text = 'What type of feedback are you providing?'
+        self.fields['priority'].help_text = 'How urgent is this feedback?'
+        self.fields['title'].help_text = 'A brief summary of your feedback.'
+        self.fields['message'].help_text = 'Please provide as much detail as possible to help us understand and address your feedback.'
+        self.fields['page_url'].help_text = 'If this feedback is about a specific page, please include the URL.'
+    
+    def clean_message(self):
+        """Validate message has minimum length"""
+        message = self.cleaned_data.get('message')
+        if len(message.strip()) < 20:
+            raise forms.ValidationError('Please provide more detailed feedback (at least 20 characters).')
+        return message
+    
+    def clean_title(self):
+        """Validate title has minimum length"""
+        title = self.cleaned_data.get('title')
+        if len(title.strip()) < 5:
+            raise forms.ValidationError('Please provide a more descriptive title (at least 5 characters).')
+        return title

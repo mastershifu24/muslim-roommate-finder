@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Thank You - Muslim Roommate Finder{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Success Message -->
+            <div class="text-center mb-5">
+                <div class="success-icon mb-4">
+                    <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+                </div>
+                <h1 class="display-4 fw-bold text-success mb-3">
+                    Thank You!
+                </h1>
+                <p class="lead text-muted">
+                    Your feedback has been successfully submitted. We truly appreciate you taking the time to help us improve the Muslim Roommate Finder app.
+                </p>
+            </div>
+
+            <!-- Thank You Card -->
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-gradient-success text-white py-4">
+                    <h3 class="mb-0">
+                        <i class="fas fa-heart me-2"></i>Feedback Received
+                    </h3>
+                </div>
+                
+                <div class="card-body p-5 text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-envelope-open-text text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    
+                    <h4 class="text-primary mb-3">What happens next?</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <i class="fas fa-search text-info me-2"></i>
+                                <strong>Review</strong><br>
+                                <small class="text-muted">We'll carefully review your feedback</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <i class="fas fa-tools text-warning me-2"></i>
+                                <strong>Implement</strong><br>
+                                <small class="text-muted">We'll work on implementing improvements</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <i class="fas fa-sync text-success me-2"></i>
+                                <strong>Update</strong><br>
+                                <small class="text-muted">We'll update the app based on your input</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <i class="fas fa-share text-primary me-2"></i>
+                                <strong>Share</strong><br>
+                                <small class="text-muted">We'll keep you updated on progress</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="card border-0 bg-light mt-4">
+                <div class="card-body p-4 text-center">
+                    <h5 class="card-title text-primary mb-3">
+                        <i class="fas fa-rocket me-2"></i>Keep Exploring!
+                    </h5>
+                    <p class="card-text text-muted mb-4">
+                        While we work on your feedback, feel free to continue exploring the app and finding your perfect Muslim roommate!
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="{% url 'home' %}" class="btn btn-primary">
+                            <i class="fas fa-home me-2"></i>Back to Home
+                        </a>
+                        <a href="{% url 'browse_profiles' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-users me-2"></i>Browse Profiles
+                        </a>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'create_room' %}" class="btn btn-outline-success">
+                            <i class="fas fa-plus me-2"></i>List a Room
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Feedback -->
+            <div class="text-center mt-4">
+                <p class="text-muted">
+                    Have more feedback? 
+                    <a href="{% url 'feedback' %}" class="text-primary text-decoration-none">
+                        <i class="fas fa-comment-dots me-1"></i>Submit another feedback
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
