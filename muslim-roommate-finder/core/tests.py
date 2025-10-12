@@ -534,20 +534,20 @@ class ImageUploadTestCase(TestCase):
         
         self.room_type = RoomType.objects.create(name='Private Room')
     
-    def create_test_image(self):
+    def create_test_image(self, filename="test_image.jpg", color='red'):
         """Create a test image file"""
         from PIL import Image
         from io import BytesIO
         from django.core.files.uploadedfile import SimpleUploadedFile
         
         # Create a simple test image
-        image = Image.new('RGB', (100, 100), color='red')
+        image = Image.new('RGB', (100, 100), color=color)
         image_io = BytesIO()
         image.save(image_io, format='JPEG')
         image_io.seek(0)
         
         return SimpleUploadedFile(
-            "test_image.jpg",
+            filename,
             image_io.read(),
             content_type="image/jpeg"
         )
@@ -603,6 +603,34 @@ class ImageUploadTestCase(TestCase):
         
         # Should only have 6 images
         self.assertEqual(room.images.count(), 6)
+    
+    def test_profile_photo_upload(self):
+        """Test uploading a profile photo"""
+        profile_photo = self.create_test_image(filename="profile.jpg", color='blue')
+        
+        response = self.client.post(reverse('create_profile'), {
+            'name': 'Updated User',
+            'age': 30,
+            'gender': 'male',
+            'city': 'New York',
+            'is_looking_for_room': True,
+            'only_eats_zabihah': True,
+            'prayer_friendly': True,
+            'guests_allowed': False,
+            'bio': 'Test bio for profile',
+            'contact_email': 'test@example.com',
+            'profile_photo': profile_photo
+        }, follow=True)
+        
+        # Refresh profile from database
+        self.profile.refresh_from_db()
+        
+        # Check profile was updated
+        self.assertEqual(self.profile.name, 'Updated User')
+        
+        # Check profile photo was uploaded
+        self.assertTrue(self.profile.profile_photo)
+        self.assertIn('profile_photos/', self.profile.profile_photo.name)
 
 
 # Run tests with: python manage.py test core.tests

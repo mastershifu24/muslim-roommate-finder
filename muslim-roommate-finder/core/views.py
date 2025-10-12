@@ -345,7 +345,7 @@ def create_profile(request):
         is_new = True
 
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=profile)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)  # ✅ Added request.FILES
         if form.is_valid():
             profile = form.save(commit=False)
             profile.user = request.user
@@ -373,7 +373,7 @@ def edit_profile(request, profile_id):
         return redirect('profile_detail', profile_id=profile.id)
 
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=profile)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)  # ✅ Added request.FILES
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully!')
