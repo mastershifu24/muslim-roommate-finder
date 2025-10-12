@@ -633,6 +633,142 @@ class ImageUploadTestCase(TestCase):
         self.assertIn('profile_photos/', self.profile.profile_photo.name)
 
 
+class EmailNotificationTestCase(TestCase):
+    """Test email notification functionality"""
+    
+    def setUp(self):
+        """Set up test data"""
+        self.client = Client()
+        
+        # Create sender
+        self.sender_user = User.objects.create_user(username='sender', email='sender@test.com', password='test')
+        self.sender_profile = self.sender_user.profile
+        self.sender_profile.name = 'Sender User'
+        self.sender_profile.contact_email = 'sender@test.com'
+        self.sender_profile.save()
+        
+        # Create recipient
+        self.recipient_user = User.objects.create_user(username='recipient', email='recipient@test.com', password='test')
+        self.recipient_profile = self.recipient_user.profile
+        self.recipient_profile.name = 'Recipient User'
+        self.recipient_profile.contact_email = 'recipient@test.com'
+        self.recipient_profile.save()
+        
+        self.client.login(username='sender', password='test')
+    
+    def test_email_sent_on_message(self):
+        """Test that email is sent when message is created"""
+        from django.core import mail
+        
+        # Send a message
+        response = self.client.post(reverse('compose_message'), {
+            'recipient_id': self.recipient_profile.id,
+            'content': 'Test message content for email notification'
+        }, follow=True)
+        
+        # Check message was created
+        message = Message.objects.filter(
+            sender=self.sender_profile,
+            recipient=self.recipient_profile
+        ).first()
+        self.assertIsNotNone(message)
+        
+        # Check email was sent (in test mode, emails are stored in mail.outbox)
+        self.assertEqual(len(mail.outbox), 1)
+        
+        # Check email content
+        email = mail.outbox[0]
+        self.assertIn('New message from Sender User', email.subject)
+        self.assertIn('recipient@test.com', email.to)
+        self.assertIn('Assalamu Alaikum', email.body)
+        self.assertIn('Test message content', email.body)
+    
+    def test_email_not_sent_if_no_email(self):
+        """Test that system doesn't crash if recipient has no email"""
+        from django.core import mail
+        
+        # Remove recipient email
+        self.recipient_profile.contact_email = ''
+        self.recipient_user.email = ''
+        self.recipient_profile.save()
+        self.recipient_user.save()
+        
+        # Send a message
+        response = self.client.post(reverse('compose_message'), {
+            'recipient_id': self.recipient_profile.id,
+            'content': 'Test message'
+        }, follow=True)
+        
+        # Message should still be created
+        message = Message.objects.filter(
+            sender=self.sender_profile,
+            recipient=self.recipient_profile
+        ).first()
+        self.assertIsNotNone(message)
+        
+        # No email should be sent
+        self.assertEqual(len(mail.outbox), 0)
+
+
+class RateLimitTestCase(TestCase):
+    """Test rate limiting functionality"""
+    
+    def setUp(self):
+        """Set up test data"""
+        self.client = Client()
+        
+        # Create sender
+        self.sender_user = User.objects.create_user(username='sender', email='sender@test.com', password='test')
+        self.sender_profile = self.sender_user.profile
+        self.sender_profile.name = 'Sender User'
+        self.sender_profile.save()
+        
+        # Create recipient
+        self.recipient_user = User.objects.create_user(username='recipient', email='recipient@test.com', password='test')
+        self.recipient_profile = self.recipient_user.profile
+        self.recipient_profile.name = 'Recipient User'
+        self.recipient_profile.contact_email = 'recipient@test.com'
+        self.recipient_profile.save()
+        
+        self.client.login(username='sender', password='test')
+    
+    def test_rate_limit_allows_normal_usage(self):
+        """Test that normal usage (under limit) works fine"""
+        # Send 3 messages (well under the 10/hour limit)
+        for i in range(3):
+            response = self.client.post(reverse('compose_message'), {
+                'recipient_id': self.recipient_profile.id,
+                'content': f'Test message {i}'
+            })
+            # Should not be rate limited
+            self.assertIn(response.status_code, [200, 302])
+        
+        # Check all messages were created
+        message_count = Message.objects.filter(sender=self.sender_profile).count()
+        self.assertEqual(message_count, 3)
+    
+    def test_rate_limit_blocks_excessive_requests(self):
+        """Test that excessive requests are blocked"""
+        # Try to send 11 messages (over the 10/hour limit)
+        successful = 0
+        blocked = 0
+        
+        for i in range(11):
+            response = self.client.post(reverse('compose_message'), {
+                'recipient_id': self.recipient_profile.id,
+                'content': f'Test message {i}'
+            }, follow=False)
+            
+            if response.status_code == 403:  # Rate limited
+                blocked += 1
+            else:
+                successful += 1
+        
+        # Should have blocked at least one request
+        self.assertGreater(blocked, 0)
+        self.assertLessEqual(successful, 10)
+
+
 # Run tests with: python manage.py test core.tests
 # Run specific test: python manage.py test core.tests.ProfileModelTestCase
 # Run with verbosity: python manage.py test core.tests -v 2

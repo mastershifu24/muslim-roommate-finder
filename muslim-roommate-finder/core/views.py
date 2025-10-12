@@ -11,6 +11,7 @@ from django.views.decorators.cache import cache_page
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
+from django_ratelimit.decorators import ratelimit
 from .models import Profile, Room, Message, RoomType, Amenity, Feedback, RoomImage
 from .forms import ProfileForm, RoomForm, UserRegistrationForm, MessageForm, FeedbackForm
 
@@ -297,9 +298,12 @@ def room_detail(request, pk):
 
 
 @login_required
+@ratelimit(key='user', rate='10/h', method='POST', block=True)
 def contact_profile(request, profile_id):
     """
     Contact a profile owner via messaging system.
+    Sends email notification to recipient.
+    Rate limited to 10 messages per hour per user.
     """
     profile = get_object_or_404(Profile, id=profile_id)
     
@@ -322,6 +326,35 @@ def contact_profile(request, profile_id):
             message.sender = sender_profile
             message.recipient = profile
             message.save()
+            
+            # Send email notification to recipient
+            try:
+                recipient_email = profile.contact_email or profile.user.email
+                if recipient_email:
+                    send_mail(
+                        subject=f'New message from {sender_profile.name} - Muslim Roommate Finder',
+                        message=f"""
+Assalamu Alaikum {profile.name},
+
+You have received a new message from {sender_profile.name} on Muslim Roommate Finder.
+
+Message preview:
+{message.content[:200]}{'...' if len(message.content) > 200 else ''}
+
+To view and reply to this message, please visit:
+{request.build_absolute_uri('/inbox/')}
+
+---
+Muslim Roommate Finder
+Connecting Muslims for halal-friendly housing solutions
+                        """.strip(),
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[recipient_email],
+                        fail_silently=True,
+                    )
+            except Exception as e:
+                print(f"Email notification failed: {e}")
+            
             messages.success(request, f'Your message has been sent to {profile.name}!')
             return redirect('profile_detail', profile_id=profile.id)
         else:
@@ -749,9 +782,12 @@ def inbox(request):
 
 
 @login_required
+@ratelimit(key='user', rate='10/h', method='POST', block=True)
 def compose_message(request, profile_id=None):
     """
     Standalone compose message view - can be used to message any profile.
+    Sends email notification to recipient.
+    Rate limited to 10 messages per hour per user.
     """
     try:
         sender_profile = request.user.profile
@@ -778,6 +814,36 @@ def compose_message(request, profile_id=None):
             message.sender = sender_profile
             message.recipient = recipient
             message.save()
+            
+            # Send email notification to recipient
+            try:
+                recipient_email = recipient.contact_email or recipient.user.email
+                if recipient_email:
+                    send_mail(
+                        subject=f'New message from {sender_profile.name} - Muslim Roommate Finder',
+                        message=f"""
+Assalamu Alaikum {recipient.name},
+
+You have received a new message from {sender_profile.name} on Muslim Roommate Finder.
+
+Message preview:
+{message.content[:200]}{'...' if len(message.content) > 200 else ''}
+
+To view and reply to this message, please visit:
+{request.build_absolute_uri('/inbox/')}
+
+---
+Muslim Roommate Finder
+Connecting Muslims for halal-friendly housing solutions
+                        """.strip(),
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[recipient_email],
+                        fail_silently=True,  # Don't fail if email doesn't send
+                    )
+            except Exception as e:
+                # Log error but don't show to user
+                print(f"Email notification failed: {e}")
+            
             messages.success(request, f'Your message has been sent to {recipient.name}!')
             return redirect('inbox')
         else:
