@@ -11,7 +11,7 @@ from django.views.decorators.cache import cache_page
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
-from .models import Profile, Room, Message, RoomType, Amenity, Feedback
+from .models import Profile, Room, Message, RoomType, Amenity, Feedback, RoomImage
 from .forms import ProfileForm, RoomForm, UserRegistrationForm, MessageForm, FeedbackForm
 
 
@@ -422,12 +422,34 @@ def create_room(request):
         form = RoomForm(request.POST, request.FILES)
         form.fields['room_type'].queryset = RoomType.objects.order_by('name')
         form.fields['amenities'].queryset = Amenity.objects.order_by('name')
+        
         if form.is_valid():
             room = form.save(commit=False)
             room.user = profile
             room.save()
             form.save_m2m()  # Save many-to-many relationships (amenities)
-            messages.success(request, 'Room listing created successfully!')
+            
+            # Handle multiple image uploads
+            images = request.FILES.getlist('images')
+            if images:
+                for i, image in enumerate(images[:6]):  # Limit to 6 images
+                    try:
+                        RoomImage.objects.create(
+                            room=room,
+                            image=image,
+                            is_primary=(i == 0)  # First image is primary
+                        )
+                    except Exception as e:
+                        messages.warning(request, f'Could not upload image: {str(e)}')
+                
+                if len(images) > 0:
+                    messages.success(request, f'Room listing created with {min(len(images), 6)} image(s)!')
+                else:
+                    messages.success(request, 'Room listing created successfully!')
+            else:
+                messages.success(request, 'Room listing created successfully!')
+                messages.info(request, 'Consider adding images to make your listing more attractive!')
+            
             return redirect('room_detail', pk=room.id)
         else:
             messages.error(request, 'Please correct the errors below.')
@@ -596,13 +618,46 @@ def room_edit(request, pk):
         form = RoomForm(request.POST, request.FILES, instance=room)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Room listing updated successfully!')
+            
+            # Handle new image uploads
+            new_images = request.FILES.getlist('images')
+            if new_images:
+                current_image_count = room.images.count()
+                max_new_images = max(0, 6 - current_image_count)  # Limit total to 6
+                
+                for i, image in enumerate(new_images[:max_new_images]):
+                    try:
+                        # If this is the first image for the room, make it primary
+                        is_primary = (current_image_count == 0 and i == 0)
+                        RoomImage.objects.create(
+                            room=room,
+                            image=image,
+                            is_primary=is_primary
+                        )
+                    except Exception as e:
+                        messages.warning(request, f'Could not upload image: {str(e)}')
+                
+                if len(new_images) > max_new_images:
+                    messages.warning(request, f'Only {max_new_images} images added (maximum 6 total).')
+                
+                messages.success(request, 'Room listing updated successfully with new images!')
+            else:
+                messages.success(request, 'Room listing updated successfully!')
+            
             return redirect("room_detail", pk=room.pk)
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
         form = RoomForm(instance=room)
-    return render(request, "room_edit.html", {"form": form, "room": room})
+    
+    # Get existing images
+    existing_images = room.images.all()
+    
+    return render(request, "room_edit.html", {
+        "form": form, 
+        "room": room,
+        "existing_images": existing_images
+    })
 
 @login_required
 def room_delete(request, pk):

@@ -148,8 +148,9 @@ class RoomForm(forms.ModelForm):
         
         # Set default room type to "Private Room" if it exists
         try:
-            private_room = RoomType.objects.get(name__icontains='private')
-            self.fields['room_type'].initial = private_room.id
+            private_room = RoomType.objects.filter(name__icontains='private').first()
+            if private_room:
+                self.fields['room_type'].initial = private_room.id
         except RoomType.DoesNotExist:
             pass
         

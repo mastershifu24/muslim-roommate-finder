@@ -110,6 +110,29 @@
                             </div>
                         </div>
 
+                        <!-- Room Images -->
+                        <div class="mb-4">
+                            <h5>Room Images</h5>
+                            <div class="mb-3">
+                                <label for="room_images" class="form-label">Upload Images (Up to 6)</label>
+                                <input type="file" 
+                                       class="form-control" 
+                                       id="room_images" 
+                                       name="images" 
+                                       multiple 
+                                       accept="image/*"
+                                       onchange="previewImages(event)">
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle"></i> 
+                                    Select up to 6 images. Max 5MB per image. Supported formats: JPEG, PNG, WEBP.
+                                    <br>First image will be set as the primary image.
+                                </div>
+                            </div>
+                            
+                            <!-- Image Preview -->
+                            <div id="image-preview" class="row g-2 mt-2"></div>
+                        </div>
+
                         <!-- Preferences -->
                         <div class="mb-4">
                             <h5>Preferences</h5>
@@ -145,5 +168,61 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function previewImages(event) {
+            const files = event.target.files;
+            const previewContainer = document.getElementById('image-preview');
+            previewContainer.innerHTML = '';
+            
+            // Limit to 6 images
+            if (files.length > 6) {
+                alert('You can only upload a maximum of 6 images. First 6 will be selected.');
+            }
+            
+            const maxFiles = Math.min(files.length, 6);
+            
+            for (let i = 0; i < maxFiles; i++) {
+                const file = files[i];
+                
+                // Check file size (5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert(`${file.name} is too large. Maximum size is 5MB.`);
+                    continue;
+                }
+                
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const col = document.createElement('div');
+                    col.className = 'col-md-4 col-sm-6';
+                    
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'card-img-top';
+                    img.style.height = '150px';
+                    img.style.objectFit = 'cover';
+                    
+                    const badge = document.createElement('div');
+                    badge.className = 'position-absolute top-0 start-0 m-2';
+                    
+                    if (i === 0) {
+                        badge.innerHTML = '<span class="badge bg-primary">Primary</span>';
+                    } else {
+                        badge.innerHTML = `<span class="badge bg-secondary">#${i + 1}</span>`;
+                    }
+                    
+                    card.appendChild(img);
+                    card.appendChild(badge);
+                    col.appendChild(card);
+                    previewContainer.appendChild(col);
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 </body>
 </html>
