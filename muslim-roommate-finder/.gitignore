@@ -69,3 +69,11 @@ PRACTICAL_EXERCISES.md
 IMPLEMENTATION_SUMMARY.md
 FINAL_UPDATE_SUMMARY.md
 CHANGELOG.md
+COMPLETE_FEATURE_SUMMARY.md
+URL_GUIDE.md
+START_SERVER.md
+
+# Helper scripts (local dev only)
+check_profiles.py
+check_media.py
+fix_sample_data.py
