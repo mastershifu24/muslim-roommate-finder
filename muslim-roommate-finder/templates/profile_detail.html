@@ -42,11 +42,26 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div>
-                            <h2 class="card-title">{{ profile.name }}, {{ profile.age }}</h2>
-                            <h6 class="text-muted">{{ profile.city }} | {{ profile.get_gender_display }}</h6>
-                            <div class="text-muted small">Listed: {{ profile.created_at|date:"M d, Y" }}</div>
-                            <div class="text-muted small">Updated: {{ profile.updated_at|timesince }} ago</div>
+                        <div class="d-flex align-items-start">
+                            <!-- Profile Photo -->
+                            {% if profile.profile_photo %}
+                                <img src="{{ profile.profile_photo.url }}" 
+                                     alt="{{ profile.name }}" 
+                                     class="rounded-circle me-3"
+                                     style="width: 100px; height: 100px; object-fit: cover; border: 3px solid #e0e0e0;">
+                            {% else %}
+                                <div class="rounded-circle me-3 bg-secondary d-flex align-items-center justify-content-center text-white"
+                                     style="width: 100px; height: 100px; font-size: 2.5rem; border: 3px solid #e0e0e0;">
+                                    {{ profile.name|first|upper }}
+                                </div>
+                            {% endif %}
+                            
+                            <div>
+                                <h2 class="card-title mb-1">{{ profile.name }}, {{ profile.age }}</h2>
+                                <h6 class="text-muted mb-1">{{ profile.city }} | {{ profile.get_gender_display }}</h6>
+                                <div class="text-muted small">Listed: {{ profile.created_at|date:"M d, Y" }}</div>
+                                <div class="text-muted small">Updated: {{ profile.updated_at|timesince }} ago</div>
+                            </div>
                         </div>
                         <div class="text-end">
                             {% if profile.is_looking_for_room %}
