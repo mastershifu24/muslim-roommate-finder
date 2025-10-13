@@ -45,52 +45,37 @@ class Command(BaseCommand):
             try:
                 self.stdout.write(f'\n📸 Downloading photo for: {user_data["name"]} ({user_data["gender"]})...')
                 
-                # Use RandomUser.me API - provides diverse, realistic photos
-                # Filter by gender to match profile
+                # Use DiceBear Avatars API - reliable, no rate limits
+                # Creates consistent, professional avatars
                 gender = user_data['gender'].lower() if user_data['gender'] else 'male'
                 
-                # Use seed for consistency but different per user
+                # Use username as seed for consistency
                 seed = user_data['username']
-                url = f'https://randomuser.me/api/?gender={gender}&seed={seed}&noinfo'
+                
+                # DiceBear API - works reliably on all servers
+                url = f'https://api.dicebear.com/7.x/avataaars/jpg?seed={seed}&size=400'
                 
                 headers = {
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
                 }
                 
-                response = requests.get(url, headers=headers, timeout=10)
+                response = requests.get(url, headers=headers, timeout=15)
                 
                 if response.status_code == 200:
-                    data = response.json()
-                    if 'results' in data and len(data['results']) > 0:
-                        # Get the large profile picture URL
-                        photo_url = data['results'][0]['picture']['large']
-                        
-                        # Download the actual image
-                        photo_response = requests.get(photo_url, headers=headers, timeout=10)
-                        
-                        if photo_response.status_code == 200:
-                            # Save image
-                            image_content = ContentFile(photo_response.content)
-                            filename = f"{user_data['username']}_profile.jpg"
-                            
-                            profile = user_data['profile']
-                            profile.profile_photo.save(filename, image_content, save=True)
-                            
-                            self.stdout.write(
-                                self.style.SUCCESS(f'  ✅ Downloaded and saved: {filename}')
-                            )
-                            success_count += 1
-                        else:
-                            self.stdout.write(
-                                self.style.WARNING(f'  ⚠️  Failed to download image (status {photo_response.status_code})')
-                            )
-                    else:
-                        self.stdout.write(
-                            self.style.WARNING(f'  ⚠️  No results from API')
-                        )
+                    # Save image directly
+                    image_content = ContentFile(response.content)
+                    filename = f"{user_data['username']}_profile.jpg"
+                    
+                    profile = user_data['profile']
+                    profile.profile_photo.save(filename, image_content, save=True)
+                    
+                    self.stdout.write(
+                        self.style.SUCCESS(f'  ✅ Downloaded and saved: {filename}')
+                    )
+                    success_count += 1
                 else:
                     self.stdout.write(
-                        self.style.WARNING(f'  ⚠️  Failed to get API data (status {response.status_code})')
+                        self.style.WARNING(f'  ⚠️  Failed to download (status {response.status_code})')
                     )
                     
             except requests.exceptions.RequestException as e:
@@ -107,10 +92,10 @@ class Command(BaseCommand):
             self.style.SUCCESS(f'\n🎉 Successfully downloaded {success_count}/{len(profiles_with_needs)} profile photos!')
         )
         self.stdout.write(
-            self.style.SUCCESS('\n💡 These are AI-generated faces from thispersondoesnotexist.com')
+            self.style.SUCCESS('\n💡 These are professional avatars from DiceBear API')
         )
         self.stdout.write(
-            self.style.SUCCESS('   Each face is unique and royalty-free for testing purposes.')
+            self.style.SUCCESS('   Consistent, unique, and royalty-free for all purposes.')
         )
         self.stdout.write('\n' + '='*60)
         
