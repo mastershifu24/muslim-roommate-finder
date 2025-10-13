@@ -49,14 +49,14 @@ class Command(BaseCommand):
                 self.stdout.write(f'\n📸 Downloading photo for: {user_data["name"]} ({user_data["gender"]})...')
                 
                 # Use DiceBear Avatars API - reliable, no rate limits
-                # Creates consistent, professional avatars
+                # Using 'notionists' style - professional, modest, appropriate for Muslim users
                 gender = user_data['gender'].lower() if user_data['gender'] else 'male'
                 
                 # Use username as seed for consistency
                 seed = user_data['username']
                 
-                # DiceBear API - works reliably on all servers
-                url = f'https://api.dicebear.com/7.x/avataaars/jpg?seed={seed}&size=400'
+                # DiceBear API with 'notionists' style - professional business-style avatars
+                url = f'https://api.dicebear.com/7.x/notionists/jpg?seed={seed}&size=400&backgroundColor=b6e3f4,c0aede,d1d4f9'
                 
                 headers = {
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
@@ -95,10 +95,10 @@ class Command(BaseCommand):
             self.style.SUCCESS(f'\n🎉 Successfully downloaded {success_count}/{len(profiles_with_needs)} profile photos!')
         )
         self.stdout.write(
-            self.style.SUCCESS('\n💡 These are professional avatars from DiceBear API')
+            self.style.SUCCESS('\n💡 These are professional business-style avatars from DiceBear API')
         )
         self.stdout.write(
-            self.style.SUCCESS('   Consistent, unique, and royalty-free for all purposes.')
+            self.style.SUCCESS('   Modest, respectful style appropriate for Muslim community.')
         )
         self.stdout.write('\n' + '='*60)
         
