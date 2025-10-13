@@ -26,16 +26,19 @@ class Command(BaseCommand):
         for user in users:
             try:
                 profile = user.profile
-                # Determine if male or female based on profile
-                if hasattr(profile, 'gender'):
+                # Add profiles that don't have photos OR need photo updates
+                # Skip admin/superuser accounts unless they need photos too
+                if profile:
                     profiles_with_needs.append({
                         'username': user.username,
                         'name': profile.name if profile.name else user.username,
                         'gender': profile.gender if profile.gender else 'male',
                         'profile': profile
                     })
-            except:
-                pass
+            except Exception as e:
+                self.stdout.write(
+                    self.style.WARNING(f'⚠️  User {user.username} has no profile: {str(e)}')
+                )
         
         self.stdout.write(f'📋 Found {len(profiles_with_needs)} profiles needing photos')
         
