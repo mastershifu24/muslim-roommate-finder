@@ -169,13 +169,15 @@ class Command(BaseCommand):
             
             # Create or update profile
             profile_data = user_data['profile']
-            profile, profile_created = Profile.objects.get_or_create(
+            profile, profile_created = Profile.objects.update_or_create(
                 user=user,
                 defaults=profile_data
             )
             
             if profile_created:
                 self.stdout.write(f'Created profile: {profile_data["name"]}')
+            else:
+                self.stdout.write(f'Updated profile: {profile_data["name"]}')
                 
                 # Assign stock photos as profile pictures
                 static_images = [
