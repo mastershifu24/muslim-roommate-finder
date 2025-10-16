@@ -89,6 +89,12 @@ class Profile(models.Model):
     guests_allowed = models.BooleanField(default=True, verbose_name="Allows Guests")
     bio = models.TextField(blank=True, verbose_name="Biography")
     contact_email = models.EmailField(blank=True, verbose_name="Contact Email")
+    whatsapp_number = models.CharField(
+        max_length=20, 
+        blank=True, 
+        verbose_name="WhatsApp Number",
+        help_text="Include country code (e.g., +12025551234) - This is the easiest way for people to contact you!"
+    )
     slug = models.SlugField(unique=True, blank=True, verbose_name="URL Slug")
     zip_code = models.CharField(max_length=10, blank=True, null=True, verbose_name="ZIP Code", db_index=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At", null=True, blank=True)
@@ -143,6 +149,56 @@ class Profile(models.Model):
             zip_match = self.zip_code and self.zip_code.strip() in [str(z).strip() for z in zip_codes]
 
         return city_match and state_match and zip_match
+    
+    def calculate_compatibility_score(self, other_profile):
+        """
+        Calculate compatibility score (0-100) with another profile.
+        This is what makes your app 10x better than Facebook groups!
+        """
+        if not other_profile or other_profile.id == self.id:
+            return 0
+        
+        score = 0
+        
+        # Religious practices alignment (40 points) - MOST IMPORTANT
+        if self.only_eats_zabihah == other_profile.only_eats_zabihah:
+            score += 20
+        if self.prayer_friendly == other_profile.prayer_friendly:
+            score += 20
+        
+        # Location proximity (30 points) - SECOND MOST IMPORTANT
+        if self.city and other_profile.city:
+            if self.city.lower().strip() == other_profile.city.lower().strip():
+                score += 30  # Same city - perfect
+            elif self.state and other_profile.state:
+                if self.state.lower().strip() == other_profile.state.lower().strip():
+                    score += 15  # Same state - okay
+        
+        # Age proximity (20 points) - THIRD MOST IMPORTANT
+        if self.age and other_profile.age:
+            age_diff = abs(self.age - other_profile.age)
+            if age_diff <= 3:
+                score += 20  # Very close in age
+            elif age_diff <= 5:
+                score += 15
+            elif age_diff <= 10:
+                score += 10
+            elif age_diff <= 15:
+                score += 5
+        
+        # Guest policy alignment (10 points)
+        if self.guests_allowed == other_profile.guests_allowed:
+            score += 10
+        
+        return min(score, 100)  # Cap at 100
+    
+    def get_whatsapp_link(self):
+        """Generate WhatsApp click-to-chat link"""
+        if not self.whatsapp_number:
+            return None
+        # Remove any non-numeric characters except +
+        clean_number = ''.join(c for c in self.whatsapp_number if c.isdigit() or c == '+')
+        return f"https://wa.me/{clean_number}"
     
     def save(self, *args, **kwargs):
         if not self.slug:

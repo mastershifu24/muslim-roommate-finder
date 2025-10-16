@@ -23,8 +23,8 @@ class UserRegistrationForm(UserCreationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['name', 'age', 'gender', 'city', 'profile_photo', 'is_looking_for_room', 'bio', 'contact_email', 
-                 'only_eats_zabihah', 'prayer_friendly', 'guests_allowed']
+        fields = ['name', 'age', 'gender', 'city', 'profile_photo', 'is_looking_for_room', 'bio', 'contact_email',
+                 'whatsapp_number', 'only_eats_zabihah', 'prayer_friendly', 'guests_allowed']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your full name'}),
             'age': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter your age'}),
@@ -33,6 +33,7 @@ class ProfileForm(forms.ModelForm):
             'profile_photo': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Tell us about yourself, your lifestyle, and what you\'re looking for in a roommate...'}),
             'contact_email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your email address'}),
+            'whatsapp_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+12025551234 (include country code)'}),
             'is_looking_for_room': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'only_eats_zabihah': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'prayer_friendly': forms.CheckboxInput(attrs={'class': 'form-check-input'}),

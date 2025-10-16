@@ -136,6 +136,57 @@ def home(request):
     return render(request, 'home_enhanced.html', context)
 
 
+@login_required
+def dashboard(request):
+    """
+    User dashboard showing their listings, profile, and TOP MATCHES with compatibility scores.
+    This is what makes your app 10x better than Facebook groups!
+    """
+    try:
+        user_profile = request.user.profile
+    except Profile.DoesNotExist:
+        messages.info(request, 'Please create a profile first to use the dashboard.')
+        return redirect('create_profile')
+    
+    # Get user's room listings
+    rooms = Room.objects.filter(user=user_profile).select_related('user').prefetch_related('images')
+    
+    # Get user's profile
+    profiles = Profile.objects.filter(user=request.user)
+    
+    # Calculate TOP MATCHES with compatibility scores
+    top_matches = []
+    if user_profile:
+        # Get all profiles looking for rooms (exclude own profile and same gender only)
+        potential_matches = Profile.objects.filter(
+            is_looking_for_room=True,
+            gender=user_profile.gender  # Same gender only
+        ).exclude(id=user_profile.id).select_related('user')
+        
+        # Calculate compatibility score for each profile
+        for profile in potential_matches:
+            score = user_profile.calculate_compatibility_score(profile)
+            if score > 0:  # Only include if there's some compatibility
+                top_matches.append({
+                    'profile': profile,
+                    'score': score,
+                    'whatsapp_link': profile.get_whatsapp_link()
+                })
+        
+        # Sort by score (highest first) and get top 10
+        top_matches.sort(key=lambda x: x['score'], reverse=True)
+        top_matches = top_matches[:10]
+    
+    context = {
+        'rooms': rooms,
+        'profiles': profiles,
+        'top_matches': top_matches,
+        'user_profile': user_profile,
+    }
+    
+    return render(request, 'dashboard.html', context)
+
+
 def browse_profiles(request):
     """
     Dedicated page for browsing all profiles with advanced filtering and pagination.
