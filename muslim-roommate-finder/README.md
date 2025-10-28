@@ -76,6 +76,17 @@ muslim-roommate-finder/
 
 ## Usage
 
+### For Testing (Quick Start)
+1. **Start the server**: `python manage.py runserver`
+2. **Create test accounts**: Visit `http://127.0.0.1:8000/create-test-account/`
+   - This creates 12 test accounts with username/password combinations
+   - All test passwords are: `password123`
+   - You'll see a list of all available test accounts to login with
+
+3. **Login** with any test account (e.g., `abdullah_malik` / `password123`)
+4. **Start testing** the features!
+
+### For Production Use
 1. **Access the application** at `http://127.0.0.1:8000/`
 2. **Register** a new account or login with existing credentials
 3. **Create a profile** with your preferences and requirements

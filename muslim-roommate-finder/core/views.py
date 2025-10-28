@@ -1267,27 +1267,29 @@ def create_test_account(request):
             except User.DoesNotExist:
                 continue
         
-        return JsonResponse({
+        # Return HTML template instead of JSON for better UX
+        login_info = [
+            {'username': 'ahmed_hassan', 'password': 'password123', 'city': 'New York', 'gender': 'Male'},
+            {'username': 'sarah_khan', 'password': 'password123', 'city': 'New York', 'gender': 'Female'},
+            {'username': 'fatima_ali', 'password': 'password123', 'city': 'Los Angeles', 'gender': 'Female'}, 
+            {'username': 'malik_rahman', 'password': 'password123', 'city': 'Los Angeles', 'gender': 'Male'},
+            {'username': 'omar_ibrahim', 'password': 'password123', 'city': 'Chicago', 'gender': 'Male'},
+            {'username': 'zainab_ahmed', 'password': 'password123', 'city': 'Chicago', 'gender': 'Female'},
+            {'username': 'aisha_mohammed', 'password': 'password123', 'city': 'Houston', 'gender': 'Female'},
+            {'username': 'ibrahim_yusuf', 'password': 'password123', 'city': 'Houston', 'gender': 'Male'},
+            {'username': 'yusuf_ahmed', 'password': 'password123', 'city': 'Phoenix', 'gender': 'Male'},
+            {'username': 'hassan_ali', 'password': 'password123', 'city': 'Phoenix', 'gender': 'Male'},
+            {'username': 'maryam_siddiqui', 'password': 'password123', 'city': 'Dallas', 'gender': 'Female'},
+            {'username': 'abdullah_malik', 'password': 'password123', 'city': 'Seattle', 'gender': 'Male'}
+        ]
+        
+        return render(request, 'test_accounts_created.html', {
             'success': True,
-            'message': 'Sample accounts processed successfully! (Existing accounts updated with latest data)',
-            'accounts': created_accounts,
-            'login_info': [
-                'ahmed_hassan / password123 (New York)',
-                'sarah_khan / password123 (New York)',
-                'fatima_ali / password123 (Los Angeles)', 
-                'malik_rahman / password123 (Los Angeles)',
-                'omar_ibrahim / password123 (Chicago)',
-                'zainab_ahmed / password123 (Chicago)',
-                'aisha_mohammed / password123 (Houston)',
-                'ibrahim_yusuf / password123 (Houston)',
-                'yusuf_ahmed / password123 (Phoenix)',
-                'hassan_ali / password123 (Phoenix)',
-                'maryam_siddiqui / password123 (Dallas)',
-                'abdullah_malik / password123 (Seattle)'
-            ]
+            'accounts_created': len(created_accounts),
+            'login_info': login_info
         })
     except Exception as e:
-        return JsonResponse({
+        return render(request, 'test_accounts_created.html', {
             'success': False,
             'error': str(e)
         })

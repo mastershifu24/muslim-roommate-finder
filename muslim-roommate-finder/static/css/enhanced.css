@@ -173,23 +173,25 @@ body::before {
   overflow: hidden;
 }
 
-/* Islamic-themed Primary Buttons */
+/* Islamic-themed Primary Buttons - High Contrast */
 .btn-primary {
   background: linear-gradient(135deg, var(--islamic-teal) 0%, var(--islamic-emerald) 100%);
-  border: none;
-  color: white;
+  border: 2px solid #004d40 !important;
+  color: white !important;
   border-radius: 0.75rem;
-  font-weight: 600;
+  font-weight: 700 !important;
   padding: 0.75rem 1.5rem;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
 }
 
 .btn-primary:hover {
   background: linear-gradient(135deg, var(--islamic-emerald) 0%, var(--islamic-teal) 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
-  color: white;
+  color: white !important;
+  border-color: #00251a !important;
 }
 
 .btn-success {
@@ -239,7 +241,7 @@ body::before {
   background-color: white;
 }
 
-/* Islamic-themed Navbar */
+/* Islamic-themed Navbar - High Contrast */
 .navbar {
   background: linear-gradient(135deg, var(--islamic-teal) 0%, var(--islamic-emerald) 100%) !important;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -247,13 +249,15 @@ body::before {
 
 .navbar-brand, .navbar-nav .nav-link {
   color: white !important;
-  font-weight: 500;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important; /* Better readability */
 }
 
 .navbar-nav .nav-link:hover {
-  color: var(--islamic-amber) !important;
+  color: #ffeb3b !important; /* Brighter yellow for better contrast */
   transform: translateY(-1px);
   transition: all 0.2s ease;
+  text-decoration: underline !important;
 }
 
 /* Profile Card Enhancements */
@@ -585,6 +589,92 @@ body::before {
     border-color: #007bff;
     color: #e2e8f0;
   }
+}
+
+/* Text Readability Improvements */
+body {
+  color: #1a1a1a !important; /* Darker text for better readability */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #000000 !important; /* Pure black for headings */
+  font-weight: 600 !important;
+}
+
+p, li, span, div {
+  color: #1a1a1a !important; /* Darker for paragraphs and general text */
+}
+
+/* Form labels - make them highly visible */
+label, .form-label {
+  color: #000000 !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* Form inputs - dark text on white background */
+.form-control, .form-select, textarea, input {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+  border: 2px solid #333333 !important;
+}
+
+.form-control::placeholder {
+  color: #666666 !important;
+  opacity: 1 !important;
+}
+
+/* Better link visibility */
+a {
+  color: #0066cc !important;
+  text-decoration: underline !important;
+}
+
+a:hover {
+  color: #003d7a !important;
+  text-decoration: underline !important;
+}
+
+/* Card text */
+.card-title {
+  color: #000000 !important;
+  font-weight: 700 !important;
+}
+
+.card-text {
+  color: #1a1a1a !important;
+}
+
+/* Badge text - ensure good contrast */
+.badge {
+  font-weight: 600 !important;
+  padding: 0.5em 0.8em !important;
+}
+
+.badge-primary, .badge.bg-primary {
+  background-color: #004080 !important;
+  color: #ffffff !important;
+}
+
+.badge-success, .badge.bg-success {
+  background-color: #006400 !important;
+  color: #ffffff !important;
+}
+
+.badge-info, .badge.bg-info {
+  background-color: #004080 !important;
+  color: #ffffff !important;
+}
+
+.badge-warning, .badge.bg-warning {
+  background-color: #996600 !important;
+  color: #ffffff !important;
+}
+
+/* Text muted - make it less muted */
+.text-muted {
+  color: #4a4a4a !important;
 }
 
 /* Accessibility Improvements */
