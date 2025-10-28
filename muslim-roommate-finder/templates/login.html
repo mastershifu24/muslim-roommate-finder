@@ -80,6 +80,21 @@
                     <div class="text-center mt-3">
                         <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
                     </div>
+                    
+                    <div class="alert alert-info mt-3" style="background-color: #cfe2ff !important; border: 2px solid #0d6efd !important;">
+                        <h6 style="color: #000000 !important; font-weight: 700 !important; margin-bottom: 0.5rem !important;">
+                            🧪 Testing the App?
+                        </h6>
+                        <p style="color: #000000 !important; margin-bottom: 0.5rem !important; font-size: 0.95rem !important;">
+                            Need test accounts? Click below to create sample users:
+                        </p>
+                        <a href="{% url 'create_test_account' %}" class="btn btn-sm btn-primary" style="font-weight: 600 !important;">
+                            Create Test Accounts
+                        </a>
+                        <p style="color: #1a1a1a !important; margin-top: 0.5rem !important; margin-bottom: 0 !important; font-size: 0.85rem !important;">
+                            All test passwords are: <code style="background-color: #f8f9fa !important; padding: 0.2rem 0.4rem !important; color: #000000 !important; font-weight: 600 !important;">password123</code>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
