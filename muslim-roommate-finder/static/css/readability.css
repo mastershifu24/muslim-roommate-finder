@@ -1,0 +1,319 @@
+/* 
+ * Readability & Accessibility Styles
+ * High contrast colors for better text visibility
+ */
+
+/* ============================================
+   TEXT COLORS - High Contrast
+   ============================================ */
+
+/* Body text - very dark gray for comfortable reading */
+body {
+  color: #1a1a1a;
+}
+
+/* Headings - pure black for maximum contrast */
+h1, h2, h3, h4, h5, h6 {
+  color: #000000;
+  font-weight: 600;
+}
+
+/* Standard text elements */
+p, li, span, div, td, th {
+  color: #1a1a1a;
+}
+
+/* Less important text - still readable */
+.text-readable-muted {
+  color: #4a4a4a;
+}
+
+/* Card text */
+.card-title {
+  color: #000000;
+  font-weight: 700;
+}
+
+.card-text {
+  color: #1a1a1a;
+}
+
+/* ============================================
+   LINKS - Clear and Underlined
+   ============================================ */
+
+a:not(.btn):not(.nav-link):not(.navbar-brand) {
+  color: #0066cc;
+  text-decoration: underline;
+}
+
+a:not(.btn):not(.nav-link):not(.navbar-brand):hover {
+  color: #003d7a;
+}
+
+/* ============================================
+   FORMS - High Contrast Inputs
+   ============================================ */
+
+/* Form labels - bold and black */
+label,
+.form-label {
+  color: #000000;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Form inputs - dark text on white with strong borders */
+.form-control,
+.form-select,
+textarea,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"] {
+  color: #000000;
+  background-color: #ffffff;
+  border: 2px solid #495057;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #0066cc;
+  box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
+}
+
+/* Placeholder text - visible but distinct */
+.form-control::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: #666666;
+  opacity: 1;
+}
+
+/* ============================================
+   ALERTS - High Contrast Messaging
+   ============================================ */
+
+.alert-info-readable {
+  background-color: #cfe2ff;
+  border: 2px solid #0d6efd;
+  color: #000000;
+}
+
+.alert-success-readable {
+  background-color: #d4edda;
+  border: 3px solid #28a745;
+  color: #000000;
+}
+
+.alert-danger-readable {
+  background-color: #f8d7da;
+  border: 3px solid #dc3545;
+  color: #000000;
+}
+
+.alert-warning-readable {
+  background-color: #fff3cd;
+  border: 2px solid #ffc107;
+  color: #000000;
+}
+
+/* Alert headings */
+.alert h5,
+.alert h6 {
+  color: #000000;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   BADGES - Clear Contrast
+   ============================================ */
+
+.badge {
+  font-weight: 600;
+  padding: 0.5em 0.8em;
+}
+
+.badge-primary-readable,
+.badge.bg-primary {
+  background-color: #004080;
+  color: #ffffff;
+}
+
+.badge-success-readable,
+.badge.bg-success {
+  background-color: #006400;
+  color: #ffffff;
+}
+
+.badge-info-readable,
+.badge.bg-info {
+  background-color: #004080;
+  color: #ffffff;
+}
+
+.badge-warning-readable,
+.badge.bg-warning {
+  background-color: #996600;
+  color: #ffffff;
+}
+
+.badge-danger-readable,
+.badge.bg-danger {
+  background-color: #b30000;
+  color: #ffffff;
+}
+
+/* Gender-specific badges */
+.badge-male {
+  background-color: #0066cc;
+  color: #ffffff;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+}
+
+.badge-female {
+  background-color: #dc3545;
+  color: #ffffff;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+}
+
+/* ============================================
+   BUTTONS - Enhanced Visibility
+   ============================================ */
+
+.btn {
+  font-weight: 600;
+  border-width: 2px;
+}
+
+.btn-primary {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.btn-success {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   CARDS - Border for Definition
+   ============================================ */
+
+.card-bordered {
+  border: 2px solid #dee2e6;
+}
+
+.card-male {
+  border: 2px solid #0066cc;
+  background-color: #ffffff;
+}
+
+.card-female {
+  border: 2px solid #dc3545;
+  background-color: #ffffff;
+}
+
+/* ============================================
+   CODE & PRE - Inline Code Blocks
+   ============================================ */
+
+code {
+  background-color: #f8f9fa;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  color: #000000;
+  border: 1px solid #dee2e6;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+pre {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  color: #000000;
+  border: 1px solid #dee2e6;
+}
+
+/* ============================================
+   NAVBAR - Text Shadow for Readability
+   ============================================ */
+
+.navbar-brand,
+.navbar-nav .nav-link {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.text-black {
+  color: #000000;
+}
+
+.text-dark-gray {
+  color: #1a1a1a;
+}
+
+.text-medium-gray {
+  color: #4a4a4a;
+}
+
+.font-weight-bold {
+  font-weight: 700;
+}
+
+.font-weight-semibold {
+  font-weight: 600;
+}
+
+/* Large, prominent text */
+.text-large {
+  font-size: 1.2rem;
+}
+
+.text-xlarge {
+  font-size: 1.5rem;
+}
+
+/* ============================================
+   ACCESSIBILITY - Focus States
+   ============================================ */
+
+.btn:focus,
+.form-control:focus,
+.form-select:focus,
+.nav-link:focus,
+a:focus {
+  outline: 2px solid #0066cc;
+  outline-offset: 2px;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  body, p, li, span, div {
+    color: #000000 !important;
+  }
+  
+  .btn, .navbar, .alert {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   DARK MODE OVERRIDE (Optional)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  /* Only apply if you want to support dark mode later */
+  /* Currently maintaining light mode for consistency */
+}
+

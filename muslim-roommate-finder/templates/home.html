@@ -22,10 +22,24 @@
   </div>
   <div class="collapse" id="filtersCollapse">
     <div class="card-body">
-      <form method="get" class="row g-3">
+      <!-- HTMX-powered live filtering -->
+      <form method="get" class="row g-3"
+            hx-get="{% url 'home' %}"
+            hx-trigger="change delay:300ms, search"
+            hx-target="#results"
+            hx-indicator="#loading-spinner">
         <div class="col-md-3">
           <label for="search" class="form-label">Search</label>
-          <input type="text" class="form-control" id="search" name="search" value="{{ search_query }}" placeholder="Search...">
+          <input type="text" 
+                 class="form-control" 
+                 id="search" 
+                 name="search" 
+                 value="{{ search_query }}" 
+                 placeholder="Search..."
+                 hx-get="{% url 'home' %}"
+                 hx-trigger="keyup changed delay:500ms"
+                 hx-target="#results"
+                 hx-indicator="#loading-spinner">
         </div>
         <div class="col-md-3">
           <label for="city" class="form-label">City</label>
@@ -55,17 +69,26 @@
         <div class="col-12">
           <button type="submit" class="btn btn-primary">Apply Filters</button>
           <a href="{% url 'home' %}" class="btn btn-outline-secondary">Clear</a>
+          <!-- Loading indicator -->
+          <span id="loading-spinner" class="htmx-indicator ms-2">
+            <span class="spinner-border spinner-border-sm text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </span>
+            <span class="ms-1">Updating...</span>
+          </span>
         </div>
       </form>
     </div>
   </div>
 </div>
 
-<!-- Available Rooms -->
-{% if available_rooms %}
-<h3 class="text-success mb-3">🏠 Available Rooms ({{ rooms_count }})</h3>
-<div class="row">
-  {% for room in available_rooms %}
+<!-- Results container for HTMX updates -->
+<div id="results">
+  <!-- Available Rooms -->
+  {% if available_rooms %}
+  <h3 class="text-success mb-3">🏠 Available Rooms ({{ rooms_count }})</h3>
+  <div class="row">
+    {% for room in available_rooms %}
     <div class="col-12 col-md-6 col-lg-4 mb-4">
       <div class="card h-100 border-success">
         <a href="{% url 'room_detail' room.id %}" class="text-decoration-none text-dark">
@@ -134,4 +157,7 @@
   {% endfor %}
 </div>
 {% endif %}
+
+</div> <!-- End #results container -->
+
 {% endblock %}

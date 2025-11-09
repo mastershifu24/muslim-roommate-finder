@@ -1,0 +1,48 @@
+<!-- Partial template for profile cards (for HTMX updates) -->
+{% if profiles %}
+<div class="row">
+  {% for profile in profiles %}
+    <div class="col-12 col-md-6 col-lg-4 mb-4">
+      <div class="card h-100 border-info hover-lift">
+        <a href="{% url 'profile_detail' profile.id %}" class="text-decoration-none text-dark">
+          <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+            <span>{{ profile.name }}</span>
+            <span class="badge bg-light text-info">{{ profile.age }} yrs</span>
+          </div>
+          <div class="card-body p-0">
+            {% if profile.profile_photo %}
+              <img src="{{ profile.profile_photo.url }}" class="img-fluid w-100" alt="{{ profile.name }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+              <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                <i class="fas fa-user fa-3x text-muted"></i>
+              </div>
+            {% endif %}
+            <div class="p-3">
+              <h6 class="text-muted mb-2">
+                <i class="fas fa-map-marker-alt me-1"></i>{{ profile.city }}
+              </h6>
+              {% if profile.bio %}
+                <p class="small text-muted mb-2">{{ profile.bio|truncatewords:20 }}</p>
+              {% endif %}
+              <div class="d-flex gap-1 flex-wrap">
+                {% if profile.only_eats_zabihah %}
+                  <span class="badge badge-success-readable">Zabihah</span>
+                {% endif %}
+                {% if profile.prayer_friendly %}
+                  <span class="badge badge-info-readable">Prayer Friendly</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info-readable text-center">
+  <h5>No profiles found matching your criteria</h5>
+  <p>Try adjusting your filters or check back later for new members.</p>
+</div>
+{% endif %}
+
