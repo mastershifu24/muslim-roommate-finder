@@ -24,6 +24,11 @@ INSTALLED_APPS = [
     'django.contrib.sites',  # required for allauth
     'django_cleanup.apps.CleanupConfig',  # for automatic file cleanup
     
+    # REST Framework
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'corsheaders',
+    
     # allauth
     'allauth',
     'allauth.account',
@@ -38,6 +43,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # for static files
+    'corsheaders.middleware.CorsMiddleware',  # CORS - must be before CommonMiddleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -249,3 +255,67 @@ if DEBUG:
         EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
         print("Email notifications will be printed to console in development mode")
         print("To receive real emails, set EMAIL_HOST_USER and EMAIL_HOST_PASSWORD environment variables")
+
+# REST FRAMEWORK CONFIGURATION
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_FILTER_BACKENDS': [
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
+}
+
+# JWT SETTINGS
+from datetime import timedelta
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
+
+# CORS SETTINGS (for React Native app)
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:19006",  # Expo default
+    "http://localhost:8081",   # React Native default
+]
+
+# In production, add your mobile app domains
+if not DEBUG:
+    CORS_ALLOWED_ORIGINS += [
+        "https://muslim-roommate-finder.onrender.com",
+    ]
+
+# Allow all origins in development (for React Native testing)
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
