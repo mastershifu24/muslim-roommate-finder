@@ -59,11 +59,23 @@ export default function HomeScreen({ navigation }) {
   const calculateCompatibility = (otherProfile) => {
     if (!profile) return 0;
     
+    // Ensure both profiles have normalized booleans for comparison
+    const normalizedProfile = {
+      only_eats_zabihah: Boolean(profile.only_eats_zabihah),
+      prayer_friendly: Boolean(profile.prayer_friendly),
+      guests_allowed: Boolean(profile.guests_allowed),
+    };
+    const normalizedOther = {
+      only_eats_zabihah: Boolean(otherProfile.only_eats_zabihah),
+      prayer_friendly: Boolean(otherProfile.prayer_friendly),
+      guests_allowed: Boolean(otherProfile.guests_allowed),
+    };
+    
     let score = 0;
     
     // Religious practices (40 points)
-    if (profile.only_eats_zabihah === otherProfile.only_eats_zabihah) score += 20;
-    if (profile.prayer_friendly === otherProfile.prayer_friendly) score += 20;
+    if (normalizedProfile.only_eats_zabihah === normalizedOther.only_eats_zabihah) score += 20;
+    if (normalizedProfile.prayer_friendly === normalizedOther.prayer_friendly) score += 20;
     
     // Location (30 points)
     if (profile.city && otherProfile.city) {
@@ -86,7 +98,7 @@ export default function HomeScreen({ navigation }) {
     }
     
     // Guest policy (10 points)
-    if (profile.guests_allowed === otherProfile.guests_allowed) score += 10;
+    if (normalizedProfile.guests_allowed === normalizedOther.guests_allowed) score += 10;
     
     return Math.min(score, 100);
   };

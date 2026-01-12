@@ -54,9 +54,21 @@ export default function ProfileDetailScreen({ route, navigation }) {
   const calculateCompatibility = (otherProfile) => {
     if (!myProfile) return null;
     
+    // Ensure both profiles have normalized booleans for comparison
+    const normalizedMyProfile = {
+      only_eats_zabihah: Boolean(myProfile.only_eats_zabihah),
+      prayer_friendly: Boolean(myProfile.prayer_friendly),
+      guests_allowed: Boolean(myProfile.guests_allowed),
+    };
+    const normalizedOther = {
+      only_eats_zabihah: Boolean(otherProfile.only_eats_zabihah),
+      prayer_friendly: Boolean(otherProfile.prayer_friendly),
+      guests_allowed: Boolean(otherProfile.guests_allowed),
+    };
+    
     let score = 0;
-    if (myProfile.only_eats_zabihah === otherProfile.only_eats_zabihah) score += 20;
-    if (myProfile.prayer_friendly === otherProfile.prayer_friendly) score += 20;
+    if (normalizedMyProfile.only_eats_zabihah === normalizedOther.only_eats_zabihah) score += 20;
+    if (normalizedMyProfile.prayer_friendly === normalizedOther.prayer_friendly) score += 20;
     
     if (myProfile.city && otherProfile.city) {
       if (myProfile.city.toLowerCase() === otherProfile.city.toLowerCase()) {
@@ -76,7 +88,7 @@ export default function ProfileDetailScreen({ route, navigation }) {
       else if (ageDiff <= 15) score += 5;
     }
     
-    if (myProfile.guests_allowed === otherProfile.guests_allowed) score += 10;
+    if (normalizedMyProfile.guests_allowed === normalizedOther.guests_allowed) score += 10;
     
     return Math.min(score, 100);
   };

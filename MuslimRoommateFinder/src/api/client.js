@@ -14,6 +14,34 @@ const apiClient = axios.create({
   },
 });
 
+// Helper to normalize boolean fields (API might return strings)
+const normalizeBooleans = (obj) => {
+  if (!obj || typeof obj !== 'object') return obj;
+  
+  const booleanFields = [
+    'only_eats_zabihah', 
+    'prayer_friendly', 
+    'guests_allowed', 
+    'is_looking_for_room',
+    'is_active', // For Room objects
+    'is_read' // For Message objects
+  ];
+  const normalized = { ...obj };
+  
+  booleanFields.forEach(field => {
+    if (field in normalized) {
+      normalized[field] = Boolean(normalized[field]);
+    }
+  });
+  
+  // Handle nested objects (like user in profile)
+  if (normalized.user && typeof normalized.user === 'object') {
+    normalized.user = normalizeBooleans(normalized.user);
+  }
+  
+  return normalized;
+};
+
 // Add token to all requests if it exists
 apiClient.interceptors.request.use(
   async (config) => {
@@ -22,6 +50,24 @@ apiClient.interceptors.request.use(
       config.headers.Authorization = `Token ${token}`;
     }
     return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Normalize boolean responses
+apiClient.interceptors.response.use(
+  (response) => {
+    // Normalize single objects
+    if (response.data && typeof response.data === 'object' && !Array.isArray(response.data)) {
+      response.data = normalizeBooleans(response.data);
+    }
+    // Normalize arrays
+    if (Array.isArray(response.data)) {
+      response.data = response.data.map(item => normalizeBooleans(item));
+    }
+    return response;
   },
   (error) => {
     return Promise.reject(error);
