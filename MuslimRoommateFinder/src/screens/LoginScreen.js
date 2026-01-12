@@ -15,7 +15,8 @@ import { useAuth } from '../context/AuthContext';
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { login, loading } = useAuth();
+  const { login, loading: loadingRaw } = useAuth();
+  const loading = Boolean(loadingRaw); // Ensure it's always a boolean
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -54,8 +55,9 @@ export default function LoginScreen({ navigation }) {
               placeholder="Password"
               value={password}
               onChangeText={setPassword}
-              secureTextEntry
+              secureTextEntry={true}
               autoCapitalize="none"
+              autoCorrect={false}
             />
 
             <TouchableOpacity

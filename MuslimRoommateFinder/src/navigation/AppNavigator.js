@@ -6,9 +6,32 @@ import { TouchableOpacity, Text } from 'react-native';
 
 import { useAuth } from '../context/AuthContext';
 
+// Helper to ensure all boolean props in screen options are actual booleans
+const normalizeScreenOptions = (options) => {
+  if (!options || typeof options !== 'object') return options;
+  
+  const normalized = { ...options };
+  const booleanProps = ['headerShown', 'gestureEnabled', 'animationEnabled', 'fullScreenGestureEnabled'];
+  
+  booleanProps.forEach(prop => {
+    if (prop in normalized) {
+      const value = normalized[prop];
+      if (typeof value === 'string') {
+        console.warn(`⚠️ Found string value for ${prop}:`, value);
+        normalized[prop] = value.toLowerCase() === 'true';
+      } else {
+        normalized[prop] = Boolean(value);
+      }
+    }
+  });
+  
+  return normalized;
+};
+
 // Auth Screens
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import TestScreen from '../screens/TestScreen';
 
 // Main Screens
 import HomeScreen from '../screens/HomeScreen';
@@ -40,11 +63,11 @@ function MainTabs() {
       <Tab.Screen
         name="Home"
         component={HomeScreen}
-        options={{
+        options={normalizeScreenOptions({
           tabBarLabel: 'Home',
           tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}>🏠</Text>,
           headerShown: false,
-        }}
+        })}
       />
       <Tab.Screen
         name="Browse"
@@ -79,14 +102,13 @@ function MainTabs() {
 
 // Auth navigator (before login)
 function AuthStack() {
+  // TEST: Use minimal test screen to isolate issue
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Register" component={RegisterScreen} />
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="Test" 
+        component={TestScreen}
+      />
     </Stack.Navigator>
   );
 }
@@ -98,12 +120,12 @@ function AppStack() {
       <Stack.Screen
         name="MainTabs"
         component={MainTabs}
-        options={{ headerShown: false }}
+        options={normalizeScreenOptions({ headerShown: false })}
       />
       <Stack.Screen
         name="ProfileDetail"
         component={ProfileDetailScreen}
-        options={{ title: 'Profile' }}
+        options={normalizeScreenOptions({ title: 'Profile' })}
       />
     </Stack.Navigator>
   );
@@ -111,10 +133,18 @@ function AppStack() {
 
 // Root navigator that switches between Auth and App
 export default function AppNavigator() {
-  const { isAuthenticated, loading } = useAuth();
+  // TEMPORARY: Bypass auth to test if AuthContext is the issue
+  // const authContext = useAuth();
+  // const loading = Boolean(authContext?.loading ?? true);
+  // const isAuthenticated = Boolean(authContext?.isAuthenticated ?? false);
 
+  // Force show AuthStack for testing
+  const loading = false;
+  const isAuthenticated = false;
+
+  // Show nothing while loading
   if (loading) {
-    return null; // You could show a loading screen here
+    return null;
   }
 
   return (

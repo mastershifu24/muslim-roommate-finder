@@ -124,13 +124,13 @@ export const AuthProvider = ({ children }) => {
   const value = {
     user,
     profile,
-    loading,
+    loading: Boolean(loading), // Ensure it's always a boolean
     error,
     login,
     register,
     logout,
     refreshProfile,
-    isAuthenticated: !!user,
+    isAuthenticated: Boolean(!!user), // Ensure it's always a boolean
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

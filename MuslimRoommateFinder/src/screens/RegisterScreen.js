@@ -21,7 +21,8 @@ export default function RegisterScreen({ navigation }) {
     first_name: '',
     last_name: '',
   });
-  const { register, loading } = useAuth();
+  const { register, loading: loadingRaw } = useAuth();
+  const loading = Boolean(loadingRaw); // Ensure it's always a boolean
 
   const handleRegister = async () => {
     if (!formData.username || !formData.email || !formData.password) {
@@ -98,8 +99,9 @@ export default function RegisterScreen({ navigation }) {
               placeholder="Password *"
               value={formData.password}
               onChangeText={(value) => updateField('password', value)}
-              secureTextEntry
+              secureTextEntry={true}
               autoCapitalize="none"
+              autoCorrect={false}
             />
 
             <TextInput
@@ -107,8 +109,9 @@ export default function RegisterScreen({ navigation }) {
               placeholder="Confirm Password *"
               value={formData.password2}
               onChangeText={(value) => updateField('password2', value)}
-              secureTextEntry
+              secureTextEntry={true}
               autoCapitalize="none"
+              autoCorrect={false}
             />
 
             <TouchableOpacity
