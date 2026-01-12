@@ -22,12 +22,23 @@ export default function BrowseProfilesScreen({ navigation }) {
     loadProfiles();
   }, []);
 
+  // Helper to normalize boolean values (API might return strings)
+  const normalizeBooleans = (profile) => ({
+    ...profile,
+    only_eats_zabihah: Boolean(profile.only_eats_zabihah),
+    prayer_friendly: Boolean(profile.prayer_friendly),
+    guests_allowed: Boolean(profile.guests_allowed),
+    is_looking_for_room: Boolean(profile.is_looking_for_room),
+  });
+
   const loadProfiles = async () => {
     try {
       setLoading(true);
       const data = await profileAPI.getAllProfiles();
-      // Filter out current user's profile
-      const filtered = data.filter(p => p.id !== profile?.id);
+      // Normalize booleans and filter out current user's profile
+      const filtered = data
+        .map(p => normalizeBooleans(p))
+        .filter(p => p.id !== profile?.id);
       setProfiles(filtered);
     } catch (error) {
       console.error('Failed to load profiles:', error);

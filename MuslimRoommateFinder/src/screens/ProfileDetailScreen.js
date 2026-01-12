@@ -23,15 +23,25 @@ export default function ProfileDetailScreen({ route, navigation }) {
     loadProfile();
   }, [profileId]);
 
+  // Helper to normalize boolean values (API might return strings)
+  const normalizeBooleans = (profile) => ({
+    ...profile,
+    only_eats_zabihah: Boolean(profile.only_eats_zabihah),
+    prayer_friendly: Boolean(profile.prayer_friendly),
+    guests_allowed: Boolean(profile.guests_allowed),
+    is_looking_for_room: Boolean(profile.is_looking_for_room),
+  });
+
   const loadProfile = async () => {
     try {
       setLoading(true);
       const data = await profileAPI.getProfileById(profileId);
-      setProfile(data);
+      const normalizedProfile = normalizeBooleans(data);
+      setProfile(normalizedProfile);
       
       // Calculate compatibility if we have our profile
       if (myProfile) {
-        const score = calculateCompatibility(data);
+        const score = calculateCompatibility(normalizedProfile);
         setCompatibility(score);
       }
     } catch (error) {

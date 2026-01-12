@@ -18,6 +18,15 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Helper to normalize boolean values (API might return strings)
+  const normalizeProfileBooleans = (profileData) => ({
+    ...profileData,
+    only_eats_zabihah: Boolean(profileData.only_eats_zabihah),
+    prayer_friendly: Boolean(profileData.prayer_friendly),
+    guests_allowed: Boolean(profileData.guests_allowed),
+    is_looking_for_room: Boolean(profileData.is_looking_for_room),
+  });
+
   // Check if user is already logged in when app starts
   useEffect(() => {
     checkAuth();
@@ -29,7 +38,8 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         // Fetch user profile to verify token is still valid
         const profileData = await profileAPI.getMyProfile();
-        setProfile(profileData);
+        const normalizedProfile = normalizeProfileBooleans(profileData);
+        setProfile(normalizedProfile);
         setUser({ id: profileData.user.id, username: profileData.user.username });
       }
     } catch (err) {
@@ -54,7 +64,8 @@ export const AuthProvider = ({ children }) => {
       
       // Fetch full profile
       const profileData = await profileAPI.getMyProfile();
-      setProfile(profileData);
+      const normalizedProfile = normalizeProfileBooleans(profileData);
+      setProfile(normalizedProfile);
       setUser(data.user);
       
       return { success: true };
@@ -80,7 +91,8 @@ export const AuthProvider = ({ children }) => {
       
       // Fetch full profile
       const profileData = await profileAPI.getMyProfile();
-      setProfile(profileData);
+      const normalizedProfile = normalizeProfileBooleans(profileData);
+      setProfile(normalizedProfile);
       setUser(data.user);
       
       return { success: true };
@@ -102,7 +114,8 @@ export const AuthProvider = ({ children }) => {
   const refreshProfile = async () => {
     try {
       const profileData = await profileAPI.getMyProfile();
-      setProfile(profileData);
+      const normalizedProfile = normalizeProfileBooleans(profileData);
+      setProfile(normalizedProfile);
     } catch (err) {
       console.error('Failed to refresh profile:', err);
     }

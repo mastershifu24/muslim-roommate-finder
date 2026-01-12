@@ -23,14 +23,24 @@ export default function HomeScreen({ navigation }) {
     }
   }, [profile]);
 
+  // Helper to normalize boolean values (API might return strings)
+  const normalizeBooleans = (profile) => ({
+    ...profile,
+    only_eats_zabihah: Boolean(profile.only_eats_zabihah),
+    prayer_friendly: Boolean(profile.prayer_friendly),
+    guests_allowed: Boolean(profile.guests_allowed),
+    is_looking_for_room: Boolean(profile.is_looking_for_room),
+  });
+
   const loadMatches = async () => {
     try {
       setLoading(true);
       const profiles = await profileAPI.getAllProfiles();
       
-      // Calculate compatibility scores and sort
+      // Normalize booleans and calculate compatibility scores
       const profilesWithScores = profiles
         .filter(p => p.id !== profile?.id)
+        .map(p => normalizeBooleans(p))
         .map(p => ({
           ...p,
           score: calculateCompatibility(p),
