@@ -15,8 +15,15 @@ const apiClient = axios.create({
 });
 
 // Helper to normalize boolean fields (API might return strings)
+// Recursively handles nested objects and arrays
 const normalizeBooleans = (obj) => {
+  // Handle null/undefined/primitives
   if (!obj || typeof obj !== 'object') return obj;
+  
+  // Handle arrays - normalize each item
+  if (Array.isArray(obj)) {
+    return obj.map(item => normalizeBooleans(item));
+  }
   
   const booleanFields = [
     'only_eats_zabihah', 
@@ -26,17 +33,32 @@ const normalizeBooleans = (obj) => {
     'is_active', // For Room objects
     'is_read' // For Message objects
   ];
-  const normalized = { ...obj };
   
-  booleanFields.forEach(field => {
-    if (field in normalized) {
-      normalized[field] = Boolean(normalized[field]);
+  const normalized = {};
+  
+  // Process all fields in the object
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const value = obj[key];
+      
+      // Normalize boolean fields
+      if (booleanFields.includes(key)) {
+        // Convert string "true"/"false" or actual booleans to proper boolean
+        if (typeof value === 'string') {
+          normalized[key] = value.toLowerCase() === 'true';
+        } else {
+          normalized[key] = Boolean(value);
+        }
+      }
+      // Recursively normalize nested objects
+      else if (value && typeof value === 'object') {
+        normalized[key] = normalizeBooleans(value);
+      }
+      // Keep other values as-is
+      else {
+        normalized[key] = value;
+      }
     }
-  });
-  
-  // Handle nested objects (like user in profile)
-  if (normalized.user && typeof normalized.user === 'object') {
-    normalized.user = normalizeBooleans(normalized.user);
   }
   
   return normalized;

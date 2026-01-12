@@ -219,7 +219,7 @@ export default function MyProfileScreen({ navigation }) {
         <View style={styles.switchRow}>
           <Text style={styles.switchLabel}>🍖 Only eat Zabihah</Text>
           <Switch
-            value={formData.only_eats_zabihah}
+            value={Boolean(formData.only_eats_zabihah)}
             onValueChange={(value) => updateField('only_eats_zabihah', value)}
             trackColor={{ false: '#767577', true: '#28a745' }}
           />
@@ -228,7 +228,7 @@ export default function MyProfileScreen({ navigation }) {
         <View style={styles.switchRow}>
           <Text style={styles.switchLabel}>🕌 Prayer friendly</Text>
           <Switch
-            value={formData.prayer_friendly}
+            value={Boolean(formData.prayer_friendly)}
             onValueChange={(value) => updateField('prayer_friendly', value)}
             trackColor={{ false: '#767577', true: '#28a745' }}
           />
@@ -237,7 +237,7 @@ export default function MyProfileScreen({ navigation }) {
         <View style={styles.switchRow}>
           <Text style={styles.switchLabel}>👥 Guests allowed</Text>
           <Switch
-            value={formData.guests_allowed}
+            value={Boolean(formData.guests_allowed)}
             onValueChange={(value) => updateField('guests_allowed', value)}
             trackColor={{ false: '#767577', true: '#28a745' }}
           />
@@ -246,7 +246,7 @@ export default function MyProfileScreen({ navigation }) {
         <View style={styles.switchRow}>
           <Text style={styles.switchLabel}>🔍 Looking for room</Text>
           <Switch
-            value={formData.is_looking_for_room}
+            value={Boolean(formData.is_looking_for_room)}
             onValueChange={(value) => updateField('is_looking_for_room', value)}
             trackColor={{ false: '#767577', true: '#28a745' }}
           />
