@@ -43,10 +43,10 @@ export default function MyProfileScreen({ navigation }) {
         bio: profile.bio || '',
         contact_email: profile.contact_email || '',
         whatsapp_number: profile.whatsapp_number || '',
-        only_eats_zabihah: profile.only_eats_zabihah || false,
-        prayer_friendly: profile.prayer_friendly || false,
-        guests_allowed: profile.guests_allowed || false,
-        is_looking_for_room: profile.is_looking_for_room || false,
+        only_eats_zabihah: Boolean(profile.only_eats_zabihah),
+        prayer_friendly: Boolean(profile.prayer_friendly),
+        guests_allowed: Boolean(profile.guests_allowed),
+        is_looking_for_room: Boolean(profile.is_looking_for_room),
       });
     }
   }, [profile]);
