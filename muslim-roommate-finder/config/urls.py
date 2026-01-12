@@ -6,6 +6,11 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
+    # REST API for React Native (all prefixed with /api/)
+    path('api/', include('core.api_urls')),
+    
+    # Web app routes (existing)
     path('', views.home, name='home'),
 
     # Auth (keep existing for backward compatibility)
